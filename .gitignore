@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+backend/venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
