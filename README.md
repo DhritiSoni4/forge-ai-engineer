@@ -1,13 +1,13 @@
 # Forge AI Engineer 🚀
 
-An autonomous multi-agent AI software engineering platform that can analyze software requirements, generate implementation plans, write code, execute tasks, and review results through a modular agent architecture.
+An autonomous multi-agent AI software engineering platform that can analyze software requirements, generate implementation plans, generate code, execute tasks, and review results through a modular agent architecture.
 
-> Status: In Development
+> **Status:** Phase 1 – Foundation & Requirement Analysis
 
 ---
 
 # Current Architecture
-       
+
 ```
 forge-ai-engineer/
 │
@@ -19,9 +19,11 @@ forge-ai-engineer/
 │   │   │   └── config.py
 │   │   ├── models/
 │   │   ├── schemas/
-│   │   │   └── planner.py
+│   │   │   ├── planner.py
+│   │   │   └── project.py
 │   │   ├── services/
-│   │   │   └── planner_service.py
+│   │   │   ├── planner_service.py
+│   │   │   └── requirement_analyzer.py
 │   │   └── main.py
 │   │
 │   ├── .env
@@ -39,12 +41,12 @@ forge-ai-engineer/
 
 ## Backend
 
-- FastAPI application
-- Modular project architecture
-- API routing
-- Service layer
-- Request/Response schemas
-- Interactive Swagger documentation
+- ✅ FastAPI application
+- ✅ Modular project architecture
+- ✅ API routing
+- ✅ Service layer
+- ✅ Request/Response schemas
+- ✅ Interactive Swagger documentation
 
 ---
 
@@ -90,7 +92,43 @@ The planner currently returns mock tasks while the architecture is being develop
 
 ---
 
-# Current Flow
+# Requirement Analyzer (Initial Version)
+
+Implemented:
+
+- ✅ ProjectMetadata schema
+- ✅ RequirementAnalyzer service
+- ✅ Integrated analyzer into PlannerService
+- ✅ Initial FastAPI framework detection
+
+Current behavior:
+
+Input:
+
+```
+Build a FastAPI weather API
+```
+
+Generated metadata:
+
+```json
+{
+  "project_type": "backend_api",
+  "frameworks": [
+    "FastAPI"
+  ],
+  "language": "Python",
+  "database": null,
+  "deployment": null,
+  "features": []
+}
+```
+
+The metadata is currently generated internally and is not yet exposed through the API.
+
+---
+
+# Current Request Flow
 
 ```
 Client
@@ -100,6 +138,12 @@ FastAPI Route
    │
    ▼
 Planner Service
+   │
+   ▼
+Requirement Analyzer
+   │
+   ▼
+ProjectMetadata
    │
    ▼
 Planner Response
@@ -124,13 +168,14 @@ Routes only:
 
 ## ✅ Schemas
 
-Pydantic models define every request and response.
+Pydantic models define all request and response contracts.
 
 Current schemas:
 
 - PlannerRequest
 - PlannerTask
 - PlannerResponse
+- ProjectMetadata
 
 ---
 
@@ -144,7 +189,23 @@ The project is organized into:
 - core
 - models
 
-instead of placing everything inside `main.py`.
+instead of placing all logic inside `main.py`.
+
+---
+
+# Development Philosophy
+
+This project is being built incrementally using production software engineering practices.
+
+For every feature:
+
+- Build the smallest working version.
+- Test it.
+- Commit it.
+- Update documentation.
+- Refactor only when necessary.
+
+The architecture is designed so that deterministic components can later be replaced with LLM-powered implementations without changing downstream services.
 
 ---
 
@@ -152,61 +213,72 @@ instead of placing everything inside `main.py`.
 
 ## Phase 1 (Current)
 
-- [x] Project setup
-- [x] FastAPI backend
-- [x] Planner endpoint
-- [x] Planner service
-- [x] Dynamic planner response
-- [ ] Environment variable integration
-- [ ] Requirement Analyzer
-- [ ] Project Classifier
+- ✅ Project setup
+- ✅ FastAPI backend
+- ✅ Planner endpoint
+- ✅ Planner service
+- ✅ Environment variable integration
+- ✅ ProjectMetadata schema
+- ✅ Requirement Analyzer architecture
+- ✅ Initial framework detection
+
+Remaining:
+
+- ⬜ Framework detection expansion
+- ⬜ Database detection
+- ⬜ Feature extraction
+- ⬜ Deployment detection
+- ⬜ Project classification
+- ⬜ Dynamic planner response
 
 ---
 
 ## Phase 2
 
-- [ ] LLM integration
-- [ ] Intelligent task generation
-- [ ] Task DAG generation
-- [ ] Execution engine
+- ⬜ LLM integration
+- ⬜ Intelligent task generation
+- ⬜ Task DAG generation
+- ⬜ Execution engine
 
 ---
 
 ## Phase 3
 
-- [ ] Code generation agent
-- [ ] Debugger agent
-- [ ] Reviewer agent
-- [ ] Multi-agent orchestration
+- ⬜ Code generation agent
+- ⬜ Debugger agent
+- ⬜ Reviewer agent
+- ⬜ Multi-agent orchestration
 
 ---
 
-# Next Immediate Task
+# Immediate Next Task
 
-Implement a Requirement Analyzer.
+Expand the Requirement Analyzer.
 
-The Requirement Analyzer will convert natural language software requests into structured project metadata that the Planner can consume.
+Next milestone:
 
-Example:
-
-Input
+Input:
 
 ```
 Build a FastAPI weather API with PostgreSQL and JWT authentication.
 ```
 
-Target Output
+Target metadata:
 
 ```json
 {
   "project_type": "backend_api",
-  "framework": "FastAPI",
+  "frameworks": [
+    "FastAPI"
+  ],
+  "language": "Python",
   "database": "PostgreSQL",
+  "deployment": null,
   "features": [
-    "JWT Authentication",
-    "Weather API"
+    "Weather API",
+    "JWT Authentication"
   ]
 }
 ```
 
-This component will be implemented before integrating any LLM so that the architecture is driven by well-defined data contracts rather than model output.
+The planner will eventually consume only `ProjectMetadata`, making it independent of how the metadata is produced (rule-based parser, OpenAI, Claude, Gemini, etc.).
