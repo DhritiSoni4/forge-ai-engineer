@@ -12,6 +12,9 @@ class RequirementAnalyzer:
         if "fastapi" in prompt_lower:
             frameworks.append("FastAPI")
 
+        if "django" in prompt_lower:
+            frameworks.append("Django")
+
         return ProjectMetadata(
             project_type="backend_api",
             frameworks=frameworks,

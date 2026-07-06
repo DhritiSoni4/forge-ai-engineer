@@ -6,7 +6,6 @@ class PlannerService:
         analyzer = RequirementAnalyzer()
 
         metadata = analyzer.analyze(request.prompt)
-
         return PlannerResponse(
             project_name=request.prompt,
             tasks=[
