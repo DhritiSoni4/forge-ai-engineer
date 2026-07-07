@@ -7,3 +7,12 @@ def test_detect_fastapi():
     metadata = analyzer.analyze("Build a FastAPI weather API")
 
     assert "FastAPI" in metadata.frameworks
+
+def test_detect_postgresql():
+    analyzer = RequirementAnalyzer()
+
+    metadata = analyzer.analyze(
+        "Build a FastAPI weather API with PostgreSQL"
+    )
+
+    assert metadata.database == "PostgreSQL"

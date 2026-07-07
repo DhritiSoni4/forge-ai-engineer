@@ -8,6 +8,12 @@ FRAMEWORK_KEYWORDS = {
     "fastapi": "FastAPI",
     "django": "Django",
 }
+DATABASE_KEYWORDS = {
+    "postgresql": "PostgreSQL",
+    "mysql": "MySQL",
+    "mongodb": "MongoDB",
+    "sqlite": "SQLite",
+}
 
 
 class RequirementAnalyzer:
@@ -24,6 +30,13 @@ class RequirementAnalyzer:
             if keyword in prompt_lower:
                 frameworks.append(framework)
 
+        database = None
+
+        for keyword, db in DATABASE_KEYWORDS.items():
+            if keyword in prompt_lower:
+                database = db
+                break
+
         project_type = "unknown"
 
         if any(framework in BACKEND_FRAMEWORKS for framework in frameworks):
@@ -33,7 +46,7 @@ class RequirementAnalyzer:
             project_type=project_type,
             frameworks=frameworks,
             language="Python",
-            database=None,
+            database=database,
             deployment=None,
             features=[]
         )
