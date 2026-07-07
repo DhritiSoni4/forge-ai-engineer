@@ -8,7 +8,7 @@ An autonomous multi-agent AI software engineering platform that can analyze soft
 
 # Current Architecture
 
-```
+```text
 forge-ai-engineer/
 │
 ├── backend/
@@ -26,6 +26,9 @@ forge-ai-engineer/
 │   │   │   └── requirement_analyzer.py
 │   │   └── main.py
 │   │
+│   ├── tests/
+│   │   └── test_requirement_analyzer.py
+│   │
 │   ├── .env
 │   └── venv/
 │
@@ -41,12 +44,12 @@ forge-ai-engineer/
 
 ## Backend
 
-- ✅ FastAPI application
-- ✅ Modular project architecture
-- ✅ API routing
-- ✅ Service layer
-- ✅ Request/Response schemas
-- ✅ Interactive Swagger documentation
+* ✅ FastAPI application
+* ✅ Modular project architecture
+* ✅ API routing
+* ✅ Service layer
+* ✅ Request/Response schemas
+* ✅ Interactive Swagger documentation
 
 ---
 
@@ -54,7 +57,7 @@ forge-ai-engineer/
 
 ### Endpoint
 
-```
+```text
 POST /plan
 ```
 
@@ -88,25 +91,45 @@ POST /plan
 }
 ```
 
-The planner currently returns mock tasks while the architecture is being developed.
+The Planner currently returns mock tasks while the underlying planning architecture is being developed.
 
 ---
 
-# Requirement Analyzer (Initial Version)
+# Requirement Analyzer
 
-Implemented:
+The Requirement Analyzer converts natural language software requests into a structured `ProjectMetadata` object that downstream services can consume.
 
-- ✅ ProjectMetadata schema
-- ✅ RequirementAnalyzer service
-- ✅ Integrated analyzer into PlannerService
-- ✅ Initial FastAPI framework detection
+## Current Capabilities
 
-Current behavior:
+### Framework Detection
+
+Supported frameworks:
+
+* ✅ FastAPI
+* ✅ Django
+
+### Database Detection
+
+Supported databases:
+
+* ✅ PostgreSQL
+* ✅ MySQL
+* ✅ MongoDB
+* ✅ SQLite
+
+### Project Type Inference
+
+Current project types:
+
+* ✅ backend_api
+* ✅ unknown (fallback)
+
+### Internal Metadata Example
 
 Input:
 
-```
-Build a FastAPI weather API
+```text
+Build a FastAPI weather API with PostgreSQL
 ```
 
 Generated metadata:
@@ -118,19 +141,19 @@ Generated metadata:
     "FastAPI"
   ],
   "language": "Python",
-  "database": null,
+  "database": "PostgreSQL",
   "deployment": null,
   "features": []
 }
 ```
 
-The metadata is currently generated internally and is not yet exposed through the API.
+The metadata is currently consumed internally by the Planner and is **not exposed through the API**.
 
 ---
 
 # Current Request Flow
 
-```
+```text
 Client
    │
    ▼
@@ -151,134 +174,217 @@ Planner Response
 
 ---
 
+# Testing
+
+Testing framework:
+
+* ✅ Pytest
+
+Current unit tests:
+
+* ✅ FastAPI framework detection
+* ✅ PostgreSQL database detection
+
+Run all tests:
+
+```bash
+python3 -m pytest
+```
+
+Current status:
+
+```text
+=============================
+2 passed
+=============================
+```
+
+---
+
 # Architecture Decisions
 
 ## ✅ Service Layer
 
 Business logic lives inside `services/`.
 
-Routes only:
+Routes are responsible only for:
 
-- receive requests
-- validate input
-- call services
-- return responses
+* receiving requests
+* validation
+* calling services
+* returning responses
 
 ---
 
 ## ✅ Schemas
 
-Pydantic models define all request and response contracts.
+Pydantic models define every request and response contract.
 
 Current schemas:
 
-- PlannerRequest
-- PlannerTask
-- PlannerResponse
-- ProjectMetadata
+* PlannerRequest
+* PlannerTask
+* PlannerResponse
+* ProjectMetadata
 
 ---
 
-## ✅ Modular Structure
+## ✅ Requirement Analyzer
 
-The project is organized into:
+The analyzer is intentionally rule-based during Phase 1.
 
-- api
-- services
-- schemas
-- core
-- models
+Its responsibility is to produce a standardized `ProjectMetadata` object.
 
-instead of placing all logic inside `main.py`.
+Future versions may use LLMs internally without requiring changes to downstream components.
+
+---
+
+## ✅ Modular Design
+
+The project separates responsibilities into:
+
+* api
+* services
+* schemas
+* models
+* core
+
+instead of placing all application logic inside `main.py`.
 
 ---
 
 # Development Philosophy
 
-This project is being built incrementally using production software engineering practices.
+This project is being developed incrementally using production software engineering practices.
 
 For every feature:
 
-- Build the smallest working version.
-- Test it.
-- Commit it.
-- Update documentation.
-- Refactor only when necessary.
+1. Implement the smallest working version.
+2. Write or update tests.
+3. Verify functionality.
+4. Commit with a meaningful message.
+5. Update documentation.
 
-The architecture is designed so that deterministic components can later be replaced with LLM-powered implementations without changing downstream services.
+This keeps the project stable while continuously improving functionality.
+
+---
+
+# Current Sprint Progress
+
+## Completed
+
+* ✅ Project setup
+* ✅ FastAPI backend
+* ✅ Planner endpoint
+* ✅ Planner service
+* ✅ Environment variable integration
+* ✅ ProjectMetadata schema
+* ✅ Requirement Analyzer architecture
+* ✅ Planner integration
+* ✅ FastAPI framework detection
+* ✅ Django framework detection
+* ✅ Framework keyword mapping
+* ✅ PostgreSQL detection
+* ✅ MySQL detection
+* ✅ MongoDB detection
+* ✅ SQLite detection
+* ✅ Backend project type inference
+* ✅ Initial unit testing infrastructure
+
+---
+
+## Remaining
+
+* ⬜ Frontend framework detection
+* ⬜ Full-stack project inference
+* ⬜ Authentication detection
+* ⬜ Deployment detection
+* ⬜ Feature extraction
+* ⬜ Language inference improvements
+* ⬜ Dynamic planner response
 
 ---
 
 # Roadmap
 
-## Phase 1 (Current)
+## Phase 1 — Requirement Analysis
 
-- ✅ Project setup
-- ✅ FastAPI backend
-- ✅ Planner endpoint
-- ✅ Planner service
-- ✅ Environment variable integration
-- ✅ ProjectMetadata schema
-- ✅ Requirement Analyzer architecture
-- ✅ Initial framework detection
+Completed:
+
+* ✅ Project foundation
+* ✅ Planner API
+* ✅ Requirement Analyzer
+* ✅ Framework detection
+* ✅ Database detection
+* ✅ Unit testing
 
 Remaining:
 
-- ⬜ Framework detection expansion
-- ⬜ Database detection
-- ⬜ Feature extraction
-- ⬜ Deployment detection
-- ⬜ Project classification
-- ⬜ Dynamic planner response
+* ⬜ Frontend detection
+* ⬜ Authentication detection
+* ⬜ Deployment detection
+* ⬜ Feature extraction
+* ⬜ Dynamic Planner
 
 ---
 
-## Phase 2
+## Phase 2 — Intelligent Planning
 
-- ⬜ LLM integration
-- ⬜ Intelligent task generation
-- ⬜ Task DAG generation
-- ⬜ Execution engine
+* ⬜ LLM integration
+* ⬜ Intelligent task generation
+* ⬜ Task DAG generation
+* ⬜ Execution planning
+* ⬜ Agent orchestration
 
 ---
 
-## Phase 3
+## Phase 3 — Autonomous Engineering
 
-- ⬜ Code generation agent
-- ⬜ Debugger agent
-- ⬜ Reviewer agent
-- ⬜ Multi-agent orchestration
+* ⬜ Code Generation Agent
+* ⬜ Debugger Agent
+* ⬜ Reviewer Agent
+* ⬜ Multi-Agent Execution
+* ⬜ End-to-end autonomous software engineering workflow
+
+---
+
+# Current Commit History
+
+Recent milestones:
+
+* `feat: add initial requirement analyzer architecture`
+* `refactor: use keyword mapping for framework detection`
+* `test: add initial requirement analyzer unit tests`
+* `feat: add database detection to requirement analyzer`
 
 ---
 
 # Immediate Next Task
 
-Expand the Requirement Analyzer.
+Extend the Requirement Analyzer to recognize frontend technologies.
 
-Next milestone:
+Target example:
 
 Input:
 
-```
-Build a FastAPI weather API with PostgreSQL and JWT authentication.
+```text
+Build a React dashboard with FastAPI and PostgreSQL.
 ```
 
-Target metadata:
+Desired metadata:
 
 ```json
 {
-  "project_type": "backend_api",
+  "project_type": "fullstack",
   "frameworks": [
-    "FastAPI"
+    "FastAPI",
+    "React"
   ],
   "language": "Python",
   "database": "PostgreSQL",
   "deployment": null,
-  "features": [
-    "Weather API",
-    "JWT Authentication"
-  ]
+  "features": []
 }
 ```
 
-The planner will eventually consume only `ProjectMetadata`, making it independent of how the metadata is produced (rule-based parser, OpenAI, Claude, Gemini, etc.).
+This will introduce frontend detection and enable accurate inference of **frontend**, **backend**, and **fullstack** projects.
