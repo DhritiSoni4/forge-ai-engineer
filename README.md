@@ -387,4 +387,4 @@ Desired metadata:
 }
 ```
 
-This will introduce frontend detection and enable accurate inference of **frontend**, **backend**, and **fullstack** projects.
+This will introduce frontend detection and enable accurate inference of **frontend**, **backend**, and fullstack projects.
