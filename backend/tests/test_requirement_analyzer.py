@@ -16,3 +16,25 @@ def test_detect_postgresql():
     )
 
     assert metadata.database == "PostgreSQL"
+
+def test_detect_react_frontend():
+    analyzer = RequirementAnalyzer()
+
+    metadata = analyzer.analyze(
+        "Build a React dashboard"
+    )
+
+    assert "React" in metadata.frameworks
+    assert metadata.project_type == "frontend"
+
+
+def test_detect_fullstack_project():
+    analyzer = RequirementAnalyzer()
+
+    metadata = analyzer.analyze(
+        "Build a FastAPI backend with React frontend"
+    )
+
+    assert "FastAPI" in metadata.frameworks
+    assert "React" in metadata.frameworks
+    assert metadata.project_type == "fullstack"
