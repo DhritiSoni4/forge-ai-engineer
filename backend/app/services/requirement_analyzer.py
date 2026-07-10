@@ -80,3 +80,8 @@ class RequirementAnalyzer:
             deployment=None,
             features=[]
         )
+    
+    def _detect_frameworks(self, prompt_lower: str) -> list[str]:
+        frameworks = self._detect_frameworks(prompt_lower)
+
+        return frameworks
