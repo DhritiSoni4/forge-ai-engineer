@@ -1,22 +1,54 @@
 # Forge AI Engineer 🚀
 
-An autonomous multi-agent AI software engineering platform that can analyze software requirements, generate implementation plans, generate code, execute tasks, and review results through a modular agent architecture.
+An autonomous multi-agent AI software engineering platform that can analyze software requirements, generate implementation plans, generate code, execute tasks, and review software through a modular AI agent architecture.
 
-> **Status:** Phase 1 – Foundation & Requirement Analysis
+> **Current Status:** 🚧 Milestone 2 – Frontend Development
+
+---
+
+# Project Goal
+
+Forge aims to automate the software engineering lifecycle using specialized AI agents.
+
+The long-term vision is:
+
+```
+User Request
+      │
+      ▼
+Requirement Analyzer
+      │
+      ▼
+Planner Agent
+      │
+      ▼
+Code Generator Agent
+      │
+      ▼
+Execution Agent
+      │
+      ▼
+Reviewer Agent
+      │
+      ▼
+Final Software Project
+```
+
+Each agent has a single responsibility and can later be replaced or upgraded independently.
 
 ---
 
 # Current Architecture
 
-```text
+```
 forge-ai-engineer/
 │
 ├── backend/
 │   ├── app/
+│   │   ├── agents/
+│   │   │   └── planner_agent.py
 │   │   ├── api/
-│   │   │   └── routes.py
 │   │   ├── core/
-│   │   │   └── config.py
 │   │   ├── models/
 │   │   ├── schemas/
 │   │   │   ├── planner.py
@@ -26,16 +58,38 @@ forge-ai-engineer/
 │   │   │   └── requirement_analyzer.py
 │   │   └── main.py
 │   │
-│   ├── tests/
-│   │   └── test_requirement_analyzer.py
-│   │
-│   ├── .env
-│   └── venv/
+│   └── tests/
 │
 ├── frontend/
+│
 ├── docs/
-├── README.md
-└── .gitignore
+│
+└── README.md
+```
+
+---
+
+# Current Backend Flow
+
+```
+Client
+   │
+   ▼
+FastAPI Route
+   │
+   ▼
+PlannerService
+   │
+   ├──────────────┐
+   ▼              ▼
+Requirement    PlannerAgent
+Analyzer
+   │              │
+   ▼              ▼
+ProjectMetadata  Planner Tasks
+        │
+        ▼
+PlannerResponse
 ```
 
 ---
@@ -44,95 +98,49 @@ forge-ai-engineer/
 
 ## Backend
 
-* ✅ FastAPI application
-* ✅ Modular project architecture
-* ✅ API routing
-* ✅ Service layer
-* ✅ Request/Response schemas
-* ✅ Interactive Swagger documentation
-
----
-
-## Planner API
-
-### Endpoint
-
-```text
-POST /plan
-```
-
-### Request
-
-```json
-{
-  "prompt": "Build a Weather API"
-}
-```
-
-### Current Response
-
-```json
-{
-  "project_name": "Build a Weather API",
-  "tasks": [
-    {
-      "id": 1,
-      "title": "Analyze user requirements"
-    },
-    {
-      "id": 2,
-      "title": "Design project structure"
-    },
-    {
-      "id": 3,
-      "title": "Generate implementation plan"
-    }
-  ]
-}
-```
-
-The Planner currently returns mock tasks while the underlying planning architecture is being developed.
+- ✅ FastAPI backend
+- ✅ Modular architecture
+- ✅ Planner endpoint
+- ✅ Requirement Analyzer
+- ✅ Planner Agent
+- ✅ Dynamic implementation plan generation
+- ✅ Structured API responses
+- ✅ Unit tests using Pytest
 
 ---
 
 # Requirement Analyzer
 
-The Requirement Analyzer converts natural language software requests into a structured `ProjectMetadata` object that downstream services can consume.
-
-## Current Capabilities
+Current capabilities:
 
 ### Framework Detection
 
-Supported frameworks:
-
-* ✅ FastAPI
-* ✅ Django
+- FastAPI
+- Django
 
 ### Database Detection
 
-Supported databases:
+- PostgreSQL
+- MySQL
+- MongoDB
+- SQLite
 
-* ✅ PostgreSQL
-* ✅ MySQL
-* ✅ MongoDB
-* ✅ SQLite
+### Project Type Detection
 
-### Project Type Inference
+- backend_api
+- unknown
 
-Current project types:
+The analyzer converts natural language into structured `ProjectMetadata`.
 
-* ✅ backend_api
-* ✅ unknown (fallback)
-
-### Internal Metadata Example
+Example:
 
 Input:
 
-```text
+```
 Build a FastAPI weather API with PostgreSQL
 ```
 
-Generated metadata:
+Output:
 
 ```json
 {
@@ -147,244 +155,128 @@ Generated metadata:
 }
 ```
 
-The metadata is currently consumed internally by the Planner and is **not exposed through the API**.
-
 ---
 
-# Current Request Flow
+# Planner Agent
 
-```text
-Client
-   │
-   ▼
-FastAPI Route
-   │
-   ▼
-Planner Service
-   │
-   ▼
-Requirement Analyzer
-   │
-   ▼
-ProjectMetadata
-   │
-   ▼
-Planner Response
+The Planner Agent consumes `ProjectMetadata` and generates a dynamic implementation plan.
+
+Example response:
+
+```json
+{
+  "project_name": "Build a FastAPI weather API with PostgreSQL",
+  "metadata": {
+    "project_type": "backend_api",
+    "frameworks": [
+      "FastAPI"
+    ],
+    "language": "Python",
+    "database": "PostgreSQL",
+    "deployment": null,
+    "features": []
+  },
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Initialize backend project"
+    },
+    {
+      "id": 2,
+      "title": "Configure PostgreSQL database"
+    },
+    {
+      "id": 3,
+      "title": "Implement application logic"
+    },
+    {
+      "id": 4,
+      "title": "Write unit tests"
+    }
+  ]
+}
 ```
 
 ---
 
 # Testing
 
-Testing framework:
-
-* ✅ Pytest
-
-Current unit tests:
-
-* ✅ FastAPI framework detection
-* ✅ PostgreSQL database detection
-
-Run all tests:
+Run backend tests:
 
 ```bash
+cd backend
 python3 -m pytest
 ```
 
 Current status:
 
-```text
-=============================
-2 passed
-=============================
+```
+4 passed
 ```
 
 ---
 
-# Architecture Decisions
+# Current Milestone
 
-## ✅ Service Layer
+## ✅ Milestone 1 — Backend Planning Pipeline
 
-Business logic lives inside `services/`.
+Completed:
 
-Routes are responsible only for:
-
-* receiving requests
-* validation
-* calling services
-* returning responses
-
----
-
-## ✅ Schemas
-
-Pydantic models define every request and response contract.
-
-Current schemas:
-
-* PlannerRequest
-* PlannerTask
-* PlannerResponse
-* ProjectMetadata
+- FastAPI backend
+- Planner API
+- Requirement Analyzer
+- Planner Agent
+- Dynamic planning
+- Metadata extraction
+- Unit testing
 
 ---
 
-## ✅ Requirement Analyzer
+## 🚧 Milestone 2 — Frontend Development (Current)
 
-The analyzer is intentionally rule-based during Phase 1.
+Next tasks:
 
-Its responsibility is to produce a standardized `ProjectMetadata` object.
-
-Future versions may use LLMs internally without requiring changes to downstream components.
+- Build React + TypeScript UI
+- Connect frontend to backend
+- Display project metadata
+- Display implementation plan
+- Improve user experience
 
 ---
 
-## ✅ Modular Design
+# Future Roadmap
 
-The project separates responsibilities into:
+### Milestone 3
 
-* api
-* services
-* schemas
-* models
-* core
+- LLM-powered Planner Agent
+- Intelligent task generation
+- Task dependency graph (DAG)
 
-instead of placing all application logic inside `main.py`.
+### Milestone 4
+
+- Code Generator Agent
+- Repository generation
+- File generation
+
+### Milestone 5
+
+- Execution Agent
+- Debugger Agent
+- Reviewer Agent
+- Multi-agent orchestration
 
 ---
 
 # Development Philosophy
 
-This project is being developed incrementally using production software engineering practices.
+Forge is being developed incrementally using production software engineering practices.
 
 For every feature:
 
-1. Implement the smallest working version.
-2. Write or update tests.
-3. Verify functionality.
-4. Commit with a meaningful message.
-5. Update documentation.
+1. Build the smallest working version.
+2. Test it.
+3. Commit with a meaningful message.
+4. Update documentation.
+5. Iterate.
 
-This keeps the project stable while continuously improving functionality.
-
----
-
-# Current Sprint Progress
-
-## Completed
-
-* ✅ Project setup
-* ✅ FastAPI backend
-* ✅ Planner endpoint
-* ✅ Planner service
-* ✅ Environment variable integration
-* ✅ ProjectMetadata schema
-* ✅ Requirement Analyzer architecture
-* ✅ Planner integration
-* ✅ FastAPI framework detection
-* ✅ Django framework detection
-* ✅ Framework keyword mapping
-* ✅ PostgreSQL detection
-* ✅ MySQL detection
-* ✅ MongoDB detection
-* ✅ SQLite detection
-* ✅ Backend project type inference
-* ✅ Initial unit testing infrastructure
-
----
-
-## Remaining
-
-* ⬜ Frontend framework detection
-* ⬜ Full-stack project inference
-* ⬜ Authentication detection
-* ⬜ Deployment detection
-* ⬜ Feature extraction
-* ⬜ Language inference improvements
-* ⬜ Dynamic planner response
-
----
-
-# Roadmap
-
-## Phase 1 — Requirement Analysis
-
-Completed:
-
-* ✅ Project foundation
-* ✅ Planner API
-* ✅ Requirement Analyzer
-* ✅ Framework detection
-* ✅ Database detection
-* ✅ Unit testing
-
-Remaining:
-
-* ⬜ Frontend detection
-* ⬜ Authentication detection
-* ⬜ Deployment detection
-* ⬜ Feature extraction
-* ⬜ Dynamic Planner
-
----
-
-## Phase 2 — Intelligent Planning
-
-* ⬜ LLM integration
-* ⬜ Intelligent task generation
-* ⬜ Task DAG generation
-* ⬜ Execution planning
-* ⬜ Agent orchestration
-
----
-
-## Phase 3 — Autonomous Engineering
-
-* ⬜ Code Generation Agent
-* ⬜ Debugger Agent
-* ⬜ Reviewer Agent
-* ⬜ Multi-Agent Execution
-* ⬜ End-to-end autonomous software engineering workflow
-
----
-
-# Current Commit History
-
-Recent milestones:
-
-* `feat: add initial requirement analyzer architecture`
-* `refactor: use keyword mapping for framework detection`
-* `test: add initial requirement analyzer unit tests`
-* `feat: add database detection to requirement analyzer`
-
----
-
-# Immediate Next Task
-
-Extend the Requirement Analyzer to recognize frontend technologies.
-
-Target example:
-
-Input:
-
-```text
-Build a React dashboard with FastAPI and PostgreSQL.
-```
-
-Desired metadata:
-
-```json
-{
-  "project_type": "fullstack",
-  "frameworks": [
-    "FastAPI",
-    "React"
-  ],
-  "language": "Python",
-  "database": "PostgreSQL",
-  "deployment": null,
-  "features": []
-}
-```
-
-This will introduce frontend detection and enable accurate inference of **frontend**, **backend**, and fullstack projects.
+This keeps the architecture clean while allowing rapid feature development.
