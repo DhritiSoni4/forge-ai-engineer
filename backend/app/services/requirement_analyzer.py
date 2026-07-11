@@ -1,4 +1,5 @@
 from app.schemas.project import ProjectMetadata
+from typing import Optional
 
 BACKEND_FRAMEWORKS = {
     "FastAPI",
@@ -46,31 +47,9 @@ class RequirementAnalyzer:
             if keyword in prompt_lower:
                 frameworks.append(framework)
 
-        database = None
+        database = self._detect_database(prompt_lower)
 
-        for keyword, db in DATABASE_KEYWORDS.items():
-            if keyword in prompt_lower:
-                database = db
-                break
-
-        has_backend = any(
-            framework in BACKEND_FRAMEWORKS
-            for framework in frameworks
-        )
-
-        has_frontend = any(
-            framework in FRONTEND_FRAMEWORKS
-            for framework in frameworks
-        )
-
-        if has_backend and has_frontend:
-            project_type = "fullstack"
-        elif has_backend:
-            project_type = "backend_api"
-        elif has_frontend:
-            project_type = "frontend"
-        else:
-            project_type = "unknown"
+        project_type = self._infer_project_type(frameworks)
 
         return ProjectMetadata(
             project_type=project_type,
@@ -85,3 +64,30 @@ class RequirementAnalyzer:
         frameworks = self._detect_frameworks(prompt_lower)
 
         return frameworks
+    
+    def _detect_database(self, prompt_lower: str) -> Optional[str]:
+        for keyword, db in DATABASE_KEYWORDS.items():
+            if keyword in prompt_lower:
+                return db
+
+        return None
+    
+    def _infer_project_type(self, frameworks: list[str]) -> str:
+        has_backend = any(
+            framework in BACKEND_FRAMEWORKS
+            for framework in frameworks
+        )
+
+        has_frontend = any(
+            framework in FRONTEND_FRAMEWORKS
+            for framework in frameworks
+        )
+
+        if has_backend and has_frontend:
+            return "fullstack"
+        elif has_backend:
+            return "backend_api"
+        elif has_frontend:
+            return "frontend"
+
+        return "unknown"
