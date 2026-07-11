@@ -13,5 +13,6 @@ class PlannerService:
         
         return PlannerResponse(
             project_name=request.prompt,
+            metadata=metadata,
             tasks=tasks
         )

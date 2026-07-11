@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from app.schemas.project import ProjectMetadata
 
 
 class PlannerRequest(BaseModel):
@@ -12,4 +13,5 @@ class PlannerTask(BaseModel):
 
 class PlannerResponse(BaseModel):
     project_name: str
+    metadata: ProjectMetadata
     tasks: list[PlannerTask]
