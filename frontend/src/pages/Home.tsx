@@ -14,6 +14,11 @@ function Home() {
       placeholder="Describe your software project..."
       rows={6}
     />
+
+    <br />
+    <br />
+
+    <button>Generate Plan</button>
   </div>
 );
 }
