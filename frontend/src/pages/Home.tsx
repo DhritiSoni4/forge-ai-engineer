@@ -1,9 +1,20 @@
 import { useState } from "react";
+import { getPlan } from "../api/planner";
 import type { PlannerResponse } from "../types/planner";
 
 function Home() {
-  const [_plan, _setPlan] = useState<PlannerResponse | null>(null);
+  const [plan, setPlan] = useState<PlannerResponse | null>(null);
   const [description, setDescription] = useState("");
+
+  const handleGeneratePlan = async () => {
+    try {
+      const response = await getPlan(description);
+      setPlan(response);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main className="home">
@@ -18,7 +29,9 @@ function Home() {
           rows={8}
         />
 
-        <button>Generate Plan</button>
+        <button onClick={handleGeneratePlan}>
+          Generate Plan
+        </button>
       </section>
     </main>
   );
