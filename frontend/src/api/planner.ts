@@ -11,7 +11,7 @@ export async function getPlan(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      project_description: projectDescription,
+  prompt: projectDescription,
     }),
   });
 
