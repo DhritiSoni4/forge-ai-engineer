@@ -17,24 +17,30 @@ function Home() {
   };
 
   return (
-    <main className="home">
-      <section className="hero">
-        <h1>Forge AI Engineer</h1>
-        <p>AI-powered multi-agent software engineering platform.</p>
+  <main className="home">
+    <section className="hero">
+      <h1>Forge AI Engineer</h1>
+      <p>AI-powered multi-agent software engineering platform.</p>
 
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Describe your software project..."
-          rows={8}
-        />
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Describe your software project..."
+        rows={8}
+      />
 
-        <button onClick={handleGeneratePlan}>
-          Generate Plan
-        </button>
-      </section>
-    </main>
-  );
+      <button onClick={handleGeneratePlan}>
+        Generate Plan
+      </button>
+
+      {plan && (
+        <section>
+          <h2>{plan.project_name}</h2>
+        </section>
+      )}
+    </section>
+  </main>
+);
 }
 
 export default Home;
