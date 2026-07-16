@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { getPlan } from "../api/planner";
-import type { PlannerResponse } from "../types/planner";
 import PlannerForm from "../components/planner/PlannerForm";
+import Card from "../components/common/Card";
+import type { PlannerResponse } from "../types/planner";
 
 function Home() {
   const [plan, setPlan] = useState<PlannerResponse | null>(null);
@@ -24,13 +25,13 @@ function Home() {
         <p>AI-powered multi-agent software engineering platform.</p>
 
         <PlannerForm
-        description={description}
-        onDescriptionChange={setDescription}
-        onGeneratePlan={handleGeneratePlan}
-      />
+          description={description}
+          onDescriptionChange={setDescription}
+          onGeneratePlan={handleGeneratePlan}
+        />
 
         {plan && (
-          <section>
+          <Card>
             <h2>{plan.project_name}</h2>
 
             <h3>Project Metadata</h3>
@@ -44,13 +45,15 @@ function Home() {
             </p>
 
             <p>
-              <strong>Frameworks:</strong> {plan.metadata.frameworks.join(", ")}
+              <strong>Frameworks:</strong>{" "}
+              {plan.metadata.frameworks.join(", ")}
             </p>
 
             <p>
-              <strong>Database:</strong> {plan.metadata.database ?? "None"}
+              <strong>Database:</strong>{" "}
+              {plan.metadata.database ?? "None"}
             </p>
-          </section>
+          </Card>
         )}
       </section>
     </main>

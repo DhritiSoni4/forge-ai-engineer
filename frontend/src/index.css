@@ -81,3 +81,11 @@ button {
 button:hover {
   background: #1d4ed8;
 }
+
+.card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
