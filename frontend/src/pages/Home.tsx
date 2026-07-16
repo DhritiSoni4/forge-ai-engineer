@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getPlan } from "../api/planner";
 import type { PlannerResponse } from "../types/planner";
+import PlannerForm from "../components/planner/PlannerForm";
 
 function Home() {
   const [plan, setPlan] = useState<PlannerResponse | null>(null);
@@ -22,16 +23,11 @@ function Home() {
         <h1>Forge AI Engineer</h1>
         <p>AI-powered multi-agent software engineering platform.</p>
 
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Describe your software project..."
-          rows={8}
-        />
-
-        <button onClick={handleGeneratePlan}>
-          Generate Plan
-        </button>
+        <PlannerForm
+        description={description}
+        onDescriptionChange={setDescription}
+        onGeneratePlan={handleGeneratePlan}
+      />
 
         {plan && (
           <section>
