@@ -2,10 +2,15 @@ import type { ReactNode } from "react";
 
 interface CardProps {
   children: ReactNode;
+  className?: string;
 }
 
-function Card({ children }: CardProps) {
-  return <div className="card">{children}</div>;
+function Card({ children, className = "" }: CardProps) {
+  return (
+    <div className={`forge-card ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 export default Card;
