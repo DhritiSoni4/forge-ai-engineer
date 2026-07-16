@@ -1,62 +1,102 @@
 import { useState } from "react";
-import { getPlan } from "../api/planner";
+
+import Hero from "../components/hero/Hero";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
+
 import PlannerForm from "../components/planner/PlannerForm";
+
+import AgentTimeline from "../components/pipeline/AgentTimeline";
+
 import Card from "../components/common/Card";
+
+import { getPlan } from "../api/planner";
+
 import type { PlannerResponse } from "../types/planner";
 
 function Home() {
-  const [plan, setPlan] = useState<PlannerResponse | null>(null);
   const [description, setDescription] = useState("");
+
+  const [plan, setPlan] = useState<PlannerResponse | null>(null);
 
   const handleGeneratePlan = async () => {
     try {
       const response = await getPlan(description);
+
       setPlan(response);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <main className="home">
-      <section className="hero">
-        <h1>Forge AI Engineer</h1>
-        <p>AI-powered multi-agent software engineering platform.</p>
+    <>
+      <Navbar />
 
-        <PlannerForm
-          description={description}
-          onDescriptionChange={setDescription}
-          onGeneratePlan={handleGeneratePlan}
-        />
+      <Hero />
 
-        {plan && (
+      <main className="planner-layout">
+
+        <section className="planner-section">
+
           <Card>
-            <h2>{plan.project_name}</h2>
 
-            <h3>Project Metadata</h3>
+            <h2 className="planner-title">
+              Describe your project
+            </h2>
 
-            <p>
-              <strong>Project Type:</strong> {plan.metadata.project_type}
+            <p className="planner-subtitle">
+              Forge will analyze your requirements and generate an implementation roadmap.
             </p>
 
-            <p>
-              <strong>Language:</strong> {plan.metadata.language}
-            </p>
+            <PlannerForm
+              description={description}
+              onDescriptionChange={setDescription}
+              onGeneratePlan={handleGeneratePlan}
+            />
 
-            <p>
-              <strong>Frameworks:</strong>{" "}
-              {plan.metadata.frameworks.join(", ")}
-            </p>
-
-            <p>
-              <strong>Database:</strong>{" "}
-              {plan.metadata.database ?? "None"}
-            </p>
           </Card>
-        )}
-      </section>
-    </main>
+
+          {plan && (
+            <Card className="results-card">
+
+              <h2>{plan.project_name}</h2>
+
+              <div className="metadata-grid">
+
+                <div>
+                  <strong>Project Type</strong>
+                  <p>{plan.metadata.project_type}</p>
+                </div>
+
+                <div>
+                  <strong>Language</strong>
+                  <p>{plan.metadata.language}</p>
+                </div>
+
+                <div>
+                  <strong>Frameworks</strong>
+                  <p>{plan.metadata.frameworks.join(", ")}</p>
+                </div>
+
+                <div>
+                  <strong>Database</strong>
+                  <p>{plan.metadata.database || "None"}</p>
+                </div>
+
+              </div>
+
+            </Card>
+          )}
+
+        </section>
+
+      </main>
+
+      <AgentTimeline />
+
+      <Footer />
+    </>
   );
 }
 
