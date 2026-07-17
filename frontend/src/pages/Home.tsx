@@ -5,7 +5,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import PlannerResults from "../components/planner/PlannerResults";
 import PlannerForm from "../components/planner/PlannerForm";
-
+import EmptyState from "../components/ui/EmptyState";
 import AgentTimeline from "../components/pipeline/AgentTimeline";
 
 import Card from "../components/ui/Card";
@@ -71,8 +71,10 @@ function Home() {
 
           </Card>
 
-          {plan && (
-    <PlannerResults plan={plan} />
+          {plan ? (
+            <PlannerResults plan={plan} />
+          ) : (
+            <EmptyState />
           )}
 
         </section>
