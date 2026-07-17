@@ -8,7 +8,7 @@ import PlannerForm from "../components/planner/PlannerForm";
 
 import AgentTimeline from "../components/pipeline/AgentTimeline";
 
-import Card from "../components/common/Card";
+import Card from "../components/ui/Card";
 
 import { getPlan } from "../api/planner";
 
