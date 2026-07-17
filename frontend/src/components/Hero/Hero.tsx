@@ -1,44 +1,62 @@
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
+
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_55%)]" />
+    <section className="relative overflow-hidden py-32">
+      <div className="absolute inset-0">
+        <div className="absolute left-1/2 top-20 h-80 w-80 -translate-x-1/2 rounded-full bg-violet-600/20 blur-[120px]" />
+        <div className="absolute right-20 top-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-[120px]" />
+      </div>
 
-      <div className="mx-auto flex max-w-7xl flex-col items-center px-6 pb-24 pt-24 text-center md:pt-32">
-        <div className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-indigo-300">
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 text-center">
+
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-zinc-300 backdrop-blur"
+        >
+          <Sparkles size={16} />
           Autonomous Multi-Agent Software Engineering
-        </div>
+        </motion.div>
 
-        <h1 className="mt-8 max-w-4xl text-5xl font-black tracking-tight text-white md:text-7xl">
-          Build software with
-          <span className="bg-gradient-to-r from-indigo-400 via-sky-400 to-cyan-300 bg-clip-text text-transparent">
-            {" "}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: .1 }}
+          className="max-w-5xl text-6xl font-black leading-tight tracking-tight md:text-8xl"
+        >
+          Build Software with
+          <span className="block bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">
             AI Engineers
           </span>
-        </h1>
+        </motion.h1>
 
-        <p className="mt-8 max-w-3xl text-lg leading-8 text-zinc-400 md:text-xl">
-          Forge transforms natural language requirements into structured
-          implementation plans using specialized AI agents. The long-term vision
-          is a fully autonomous engineering platform that can plan, generate,
-          execute, and review production-ready software.
-        </p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: .2 }}
+          className="mt-8 max-w-3xl text-lg leading-8 text-zinc-400 md:text-xl"
+        >
+          Forge transforms natural language into production-ready software
+          through autonomous planning, code generation, execution, and review.
+        </motion.p>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">
-            FastAPI
-          </span>
-
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">
-            Multi-Agent
-          </span>
-
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">
-            TypeScript
-          </span>
-
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">
-            AI Native
-          </span>
+        <div className="mt-12 flex flex-wrap justify-center gap-3">
+          {[
+            "FastAPI",
+            "TypeScript",
+            "LLMs",
+            "Multi-Agent",
+            "Production Ready",
+          ].map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-zinc-300 backdrop-blur"
+            >
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </section>
