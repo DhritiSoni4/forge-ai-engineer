@@ -18,15 +18,23 @@ function Home() {
   const [description, setDescription] = useState("");
 
   const [plan, setPlan] = useState<PlannerResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleGeneratePlan = async () => {
-    try {
-      const response = await getPlan(description);
+  if (!description.trim()) return;
 
-      setPlan(response);
-    } catch (error) {
-      console.error(error);
-    }
+  setLoading(true);
+  setError("");
+
+  try {
+    const response = await getPlan(description);
+    setPlan(response);
+  } catch {
+    setError("Failed to generate implementation plan.");
+  } finally {
+    setLoading(false);
+  }
   };
 
   return (
@@ -50,10 +58,16 @@ function Home() {
             </p>
 
             <PlannerForm
-              description={description}
-              onDescriptionChange={setDescription}
-              onGeneratePlan={handleGeneratePlan}
+            description={description}
+            loading={loading}
+            onDescriptionChange={setDescription}
+            onGeneratePlan={handleGeneratePlan}
             />
+            {error && (
+              <p className="mt-4 text-center text-sm text-red-400">
+                {error}
+              </p>
+            )}
 
           </Card>
 
