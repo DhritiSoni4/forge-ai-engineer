@@ -1,46 +1,22 @@
-import { Loader2 } from "lucide-react";
-import type { ButtonHTMLAttributes } from "react";
+import type { ReactNode } from "react";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  loading?: boolean;
+interface ButtonProps {
+  children: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 function Button({
-  loading = false,
   children,
-  className = "",
+  onClick,
   disabled,
-  ...props
 }: ButtonProps) {
   return (
     <button
-      disabled={disabled || loading}
-      className={`
-        inline-flex
-        items-center
-        justify-center
-        gap-2
-        rounded-2xl
-        bg-indigo-600
-        px-6
-        py-3
-        font-semibold
-        text-white
-        transition-all
-        duration-300
-        hover:bg-indigo-500
-        hover:shadow-lg
-        hover:shadow-indigo-500/30
-        disabled:cursor-not-allowed
-        disabled:opacity-60
-        ${className}
-      `}
-      {...props}
+      onClick={onClick}
+      disabled={disabled}
+      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-500 px-6 py-3 font-semibold text-white transition hover:scale-105 hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {loading && (
-        <Loader2 className="h-5 w-5 animate-spin" />
-      )}
-
       {children}
     </button>
   );
