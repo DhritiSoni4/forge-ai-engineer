@@ -7,7 +7,7 @@ import PlannerResults from "../components/planner/PlannerResults";
 import PlannerForm from "../components/planner/PlannerForm";
 import EmptyState from "../components/ui/EmptyState";
 import AgentTimeline from "../components/pipeline/AgentTimeline";
-
+import LoadingState from "../components/ui/LoadingState";
 import Card from "../components/ui/Card";
 
 import { getPlan } from "../api/planner";
@@ -71,7 +71,9 @@ function Home() {
 
           </Card>
 
-          {plan ? (
+          {loading ? (
+            <LoadingState />
+          ) : plan ? (
             <PlannerResults plan={plan} />
           ) : (
             <EmptyState />
