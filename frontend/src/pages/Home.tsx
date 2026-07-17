@@ -3,7 +3,7 @@ import { useState } from "react";
 import Hero from "../components/hero/Hero";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-
+import PlannerResults from "../components/planner/PlannerResults";
 import PlannerForm from "../components/planner/PlannerForm";
 
 import AgentTimeline from "../components/pipeline/AgentTimeline";
@@ -72,35 +72,7 @@ function Home() {
           </Card>
 
           {plan && (
-            <Card className="results-card">
-
-              <h2>{plan.project_name}</h2>
-
-              <div className="metadata-grid">
-
-                <div>
-                  <strong>Project Type</strong>
-                  <p>{plan.metadata.project_type}</p>
-                </div>
-
-                <div>
-                  <strong>Language</strong>
-                  <p>{plan.metadata.language}</p>
-                </div>
-
-                <div>
-                  <strong>Frameworks</strong>
-                  <p>{plan.metadata.frameworks.join(", ")}</p>
-                </div>
-
-                <div>
-                  <strong>Database</strong>
-                  <p>{plan.metadata.database || "None"}</p>
-                </div>
-
-              </div>
-
-            </Card>
+    <PlannerResults plan={plan} />
           )}
 
         </section>
