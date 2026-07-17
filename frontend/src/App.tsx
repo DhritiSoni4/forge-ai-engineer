@@ -1,9 +1,7 @@
+import Home from "./pages/Home";
+
 function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center text-3xl text-white bg-black">
-      Forge Works 🚀
-    </div>
-  );
+  return <Home />;
 }
 
 export default App;
