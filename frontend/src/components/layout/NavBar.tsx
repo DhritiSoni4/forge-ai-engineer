@@ -18,11 +18,30 @@ function Navbar() {
 
         </div>
 
-        <nav className="hidden gap-8 text-sm text-zinc-400 md:flex">
-          <a href="#">Planner</a>
-          <a href="#">Pipeline</a>
-          <a href="#">GitHub</a>
-        </nav>
+        <nav className="hidden items-center gap-8 md:flex">
+
+        <a className="text-zinc-400 transition hover:text-white" href="#">
+          Planner
+        </a>
+
+        <a className="text-zinc-400 transition hover:text-white" href="#">
+          Agents
+        </a>
+
+        <a className="text-zinc-400 transition hover:text-white" href="#">
+          Roadmap
+        </a>
+
+        <a
+          className="rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300 transition hover:bg-violet-500/20"
+          href="https://github.com/DhritiSoni4/forge-ai-engineer"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+
+      </nav>
 
         <span className="rounded-full bg-violet-500/20 px-4 py-2 text-xs text-violet-300">
           Beta
