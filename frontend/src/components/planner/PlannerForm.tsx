@@ -1,5 +1,6 @@
-import { Sparkles } from "lucide-react";
+import { Wand2 } from "lucide-react";
 import Button from "../ui/Button";
+import Spinner from "../ui/Spinner";
 
 interface PlannerFormProps {
   description: string;
@@ -15,30 +16,40 @@ function PlannerForm({
   onGeneratePlan,
 }: PlannerFormProps) {
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-2xl">
-        <textarea
-          rows={8}
-          value={description}
-          onChange={(e) => onDescriptionChange(e.target.value)}
-          placeholder="Describe the software you want Forge to build...
+    <div className="space-y-6">
+
+      <textarea
+        rows={8}
+        value={description}
+        onChange={(e) => onDescriptionChange(e.target.value)}
+        placeholder="Describe the software you want Forge to build...
 
 Example:
-Build a FastAPI weather API with PostgreSQL and JWT authentication."
-          className="w-full resize-none rounded-2xl border border-white/10 bg-zinc-900/70 p-5 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-indigo-500"
-        />
+Build a FastAPI weather API with PostgreSQL, JWT authentication and Docker deployment."
+        className="w-full rounded-2xl border border-white/10 bg-zinc-950 p-6 text-white outline-none transition focus:border-violet-500"
+      />
 
-        <div className="mt-6 flex justify-end">
-          <Button
-            loading={loading}
-            onClick={onGeneratePlan}
-            disabled={!description.trim()}
-          >
-            <Sparkles size={18} />
-            Generate Plan
-          </Button>
-        </div>
+      <div className="flex justify-end">
+
+        <Button
+          onClick={onGeneratePlan}
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Spinner />
+              Generating...
+            </>
+          ) : (
+            <>
+              <Wand2 size={18} />
+              Generate Plan
+            </>
+          )}
+        </Button>
+
       </div>
+
     </div>
   );
 }
