@@ -9,7 +9,7 @@ import EmptyState from "../components/ui/EmptyState";
 import AgentTimeline from "../components/pipeline/AgentTimeline";
 import LoadingState from "../components/ui/LoadingState";
 import Card from "../components/ui/Card";
-
+import Sidebar from "../components/layout/Sidebar";
 import { getPlan } from "../api/planner";
 
 import type { PlannerResponse } from "../types/planner";
@@ -43,7 +43,7 @@ function Home() {
 
       <Hero />
 
-      <main className="mx-auto max-w-7xl px-6 pb-32">
+      <main className="mx-auto flex max-w-7xl gap-8 px-6 pb-32">
 
         <section className="mx-auto max-w-5xl">
 
