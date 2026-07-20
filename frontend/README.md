@@ -400,5 +400,3 @@ The project prioritizes modularity, scalability, and maintainability to support 
 | Production Deployment | 🚧 |
 
 ---
-
-Built with ❤️ to explore the future of autonomous software engineering.
