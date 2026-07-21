@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 import type { PlannerResponse } from "../../types/planner";
 
 import MetadataCard from "./MetadataCard";
@@ -7,26 +9,49 @@ interface PlannerResultsProps {
   plan: PlannerResponse;
 }
 
-function PlannerResults({
-  plan,
-}: PlannerResultsProps) {
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+    },
+  },
+};
+
+function PlannerResults({ plan }: PlannerResultsProps) {
   return (
-    <section className="mt-12 space-y-10">
-
-      <div>
-
-        <h2 className="text-3xl font-bold">
-          {plan.project_name}
-        </h2>
+    <motion.section
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="mt-12 space-y-10"
+    >
+      <motion.div variants={fadeUp}>
+        <h2 className="text-3xl font-bold">{plan.project_name}</h2>
 
         <p className="mt-2 text-zinc-400">
           Generated implementation roadmap.
         </p>
+      </motion.div>
 
-      </div>
-
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-
+      <motion.div
+        variants={container}
+        className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"
+      >
         <MetadataCard
           title="Project Type"
           value={plan.metadata.project_type}
@@ -46,17 +71,17 @@ function PlannerResults({
           title="Database"
           value={plan.metadata.database || "None"}
         />
+      </motion.div>
 
-      </div>
-
-      <div>
-
+      <motion.div variants={fadeUp}>
         <h2 className="mb-6 text-2xl font-bold">
           Implementation Plan
         </h2>
 
-        <div className="space-y-4">
-
+        <motion.div
+          variants={container}
+          className="space-y-4"
+        >
           {plan.tasks.map((task) => (
             <TaskCard
               key={task.id}
@@ -64,12 +89,9 @@ function PlannerResults({
               title={task.title}
             />
           ))}
-
-        </div>
-
-      </div>
-
-    </section>
+        </motion.div>
+      </motion.div>
+    </motion.section>
   );
 }
 
