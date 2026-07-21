@@ -1,38 +1,78 @@
 # Forge AI Engineer 🚀
 
-Forge AI Engineer is an autonomous multi-agent software engineering platform that transforms natural language software requirements into production-ready applications through a collaborative AI agent pipeline.
+> An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured implementation plans through a modular AI agent pipeline.
 
-> **Current Status:** 🚧 Milestone 2 — Premium Frontend MVP
+> **Status:** 🚧 Active Development | Planning Engine ✅ | Premium Frontend MVP ✅
 
 ---
 
-# Vision
+## Overview
 
-Forge aims to automate the complete software development lifecycle using specialized AI agents that each solve one well-defined problem.
+Forge AI Engineer is an AI-native software engineering platform designed around specialized autonomous agents. Instead of relying on a single monolithic model, Forge decomposes software development into independent reasoning stages, allowing each agent to focus on a specific task.
 
+Current implementation focuses on intelligent project planning, while the architecture is designed to evolve toward autonomous code generation, execution, review, and deployment.
+
+---
+
+## AI Pipeline
+
+```text
+User Prompt
+      │
+      ▼
+Requirement Analyzer
+      │
+      ▼
+Planner Agent
+      │
+      ▼
+Code Generator Agent (Planned)
+      │
+      ▼
+Execution Agent (Planned)
+      │
+      ▼
+Reviewer Agent (Planned)
+      │
+      ▼
+Production Software
 ```
-                    User Prompt
-                         │
-                         ▼
-              Requirement Analyzer
-                         │
-                         ▼
-                  Planner Agent
-                         │
-                         ▼
-             Code Generator Agent
-                         │
-                         ▼
-                Execution Agent
-                         │
-                         ▼
-                 Reviewer Agent
-                         │
-                         ▼
-             Production Software
-```
 
-Each agent is independent, modular, and replaceable with more advanced implementations over time.
+---
+
+# Features
+
+## Backend
+
+- ✅ Requirement Analyzer
+- ✅ Planner Agent
+- ✅ Dynamic implementation roadmap generation
+- ✅ FastAPI REST API
+- ✅ Framework detection
+- ✅ Database detection
+- ✅ Project metadata extraction
+- ✅ Modular backend architecture
+- ✅ Unit tested planner workflow
+
+---
+
+## Frontend
+
+- ✅ Premium landing page
+- ✅ Sticky navigation
+- ✅ Responsive design
+- ✅ Cursor-inspired planner workspace
+- ✅ Auto-resizing prompt editor
+- ✅ Keyboard shortcut (Ctrl/Cmd + Enter)
+- ✅ Animated loading experience
+- ✅ Animated planner results
+- ✅ Metadata dashboard
+- ✅ Interactive task cards
+- ✅ Multi-agent pipeline visualization
+- ✅ Workspace sidebar
+- ✅ Persistent project history
+- ✅ Reusable UI component library
+- ✅ Framer Motion animations
 
 ---
 
@@ -56,200 +96,142 @@ Each agent is independent, modular, and replaceable with more advanced implement
 
 ---
 
-# Current Architecture
+# Repository Structure
 
-```
+```text
 forge-ai-engineer/
 
 ├── backend/
-│
 │   ├── app/
-│   │
 │   ├── agents/
-│   │      planner_agent.py
-│   │
 │   ├── api/
-│   ├── services/
-│   ├── schemas/
 │   ├── models/
-│   └── main.py
-│
+│   ├── schemas/
+│   ├── services/
+│   └── tests/
 │
 ├── frontend/
-│
 │   └── src/
-│
 │       ├── api/
 │       ├── assets/
 │       ├── components/
-│       │
-│       ├── hero/
-│       ├── layout/
-│       ├── pipeline/
-│       ├── planner/
-│       └── ui/
-│
+│       │   ├── hero/
+│       │   ├── layout/
+│       │   ├── pipeline/
+│       │   ├── planner/
+│       │   └── ui/
 │       ├── pages/
-│       └── types/
+│       ├── services/
+│       ├── types/
+│       └── App.tsx
 │
 └── README.md
 ```
 
 ---
 
-# Current Backend Flow
+# Current Architecture
 
+```text
+                 React Frontend
+                        │
+                        ▼
+               Planner Workspace
+                        │
+                        ▼
+                 POST /plan API
+                        │
+                        ▼
+             Requirement Analyzer
+                        │
+          ┌─────────────┴─────────────┐
+          ▼                           ▼
+ Project Metadata              Planner Agent
+          │                           │
+          └─────────────┬─────────────┘
+                        ▼
+             Implementation Plan
+                        │
+                        ▼
+            Interactive Planner UI
+                        │
+                        ▼
+           Persistent Project History
 ```
-Client
-   │
-   ▼
-POST /plan
-   │
-   ▼
-Planner Service
-   │
-   ├─────────────┐
-   ▼             ▼
-Requirement   Planner Agent
-Analyzer
-   │             │
-   ▼             ▼
-Metadata      Implementation Tasks
-        │
-        ▼
- Planner Response
-```
 
 ---
 
-# Frontend Features
+# Current Progress
 
-### Premium Landing Page
+## ✅ Planning Engine
 
-- Modern dark theme
-- Responsive layout
-- Glassmorphism cards
-- Animated hero
-- Premium typography
-- Sticky navigation
-
----
-
-### Planner Workspace
-
-- AI prompt workspace
-- Project description input
-- Loading experience
-- Error handling
-- Empty state
-- Responsive layout
+- Requirement Analyzer
+- Planner Agent
+- Dynamic task generation
+- REST API
+- Unit tests
 
 ---
 
-### Planner Results
+## ✅ Premium Frontend
 
-- Project overview
+- Landing page
+- Planner workspace
+- Planner results
 - Metadata dashboard
-- Implementation roadmap
-- Modular task cards
-- Reusable metadata cards
+- Cursor-style prompt editor
+- Animated UI
+- Project history
+- Responsive layout
+- Design system
 
 ---
 
-### AI Pipeline
+## 🚧 In Progress
 
-Visual representation of Forge's multi-agent architecture.
-
-Current agents:
-
-- ✅ Requirement Analyzer
-- ✅ Planner Agent
-- 🚧 Code Generator
-- 🚧 Execution Agent
-- 🚧 Reviewer Agent
+- Command Palette
+- Toast Notifications
+- Settings Modal
+- Theme Polish
+- Accessibility Improvements
 
 ---
 
-# Backend Features
+## 📍 Planned
 
-## Requirement Analyzer
+### Intelligent Planning
 
-Current capabilities
+- LLM-powered planning
+- Streaming responses
+- Task dependency graph
+- Project reasoning
 
-### Framework Detection
+### Autonomous Coding
 
-- FastAPI
-- Django
+- Code Generator Agent
+- Multi-file generation
+- Repository creation
+- Template selection
 
-### Database Detection
+### Autonomous Execution
 
-- PostgreSQL
-- MySQL
-- MongoDB
-- SQLite
+- Execution Agent
+- Reviewer Agent
+- Self-healing workflows
+- Multi-agent orchestration
 
-### Project Type Detection
+### Production Platform
 
-- Backend API
-- Unknown
-
-Example
-
-Input
-
-```
-Build a FastAPI weather API with PostgreSQL
-```
-
-Output
-
-```json
-{
-  "project_type": "backend_api",
-  "frameworks": ["FastAPI"],
-  "language": "Python",
-  "database": "PostgreSQL",
-  "deployment": null,
-  "features": []
-}
-```
+- Authentication
+- Cloud project storage
+- GitHub integration
+- Docker execution
+- Team workspaces
+- Real-time collaboration
 
 ---
 
-## Planner Agent
-
-Consumes project metadata and dynamically generates implementation plans.
-
-Example
-
-```json
-{
-  "project_name": "Weather API",
-  "metadata": {
-    "language": "Python",
-    "frameworks": ["FastAPI"],
-    "database": "PostgreSQL"
-  },
-  "tasks": [
-    {
-      "id": 1,
-      "title": "Initialize backend project"
-    },
-    {
-      "id": 2,
-      "title": "Configure PostgreSQL"
-    },
-    {
-      "id": 3,
-      "title": "Implement API"
-    }
-  ]
-}
-```
-
----
-
-# Running Forge
+# Running the Project
 
 ## Backend
 
@@ -265,8 +247,6 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
----
-
 ## Frontend
 
 ```bash
@@ -279,124 +259,55 @@ npm run dev
 
 ---
 
-# Current Milestone
+# Development Philosophy
 
-## ✅ Milestone 1 — Planning Backend
-
-Completed
-
-- FastAPI backend
-- Planner API
-- Requirement Analyzer
-- Planner Agent
-- Dynamic planning
-- Unit tests
-
----
-
-## 🚧 Milestone 2 — Premium Frontend MVP
-
-Completed
-
-- Premium landing page
-- Dark theme UI
-- Responsive layout
-- Planner workspace
-- Planner results dashboard
-- Animated loading state
-- Empty state
-- Multi-agent pipeline
-- Reusable UI component library
-- Tailwind CSS migration
-- Framer Motion animations
-- Workspace sidebar
+Forge is built as a production-oriented software engineering platform rather than a prototype. The project emphasizes modularity, scalability, and maintainability so that future AI capabilities—such as streaming LLM reasoning, autonomous code generation, execution engines, and multi-agent orchestration—can be integrated without major architectural changes.
 
 ---
 
 # Roadmap
 
-## Milestone 3
-
-### Intelligent Planner
-
-- LLM-powered planning
-- Streaming responses
-- Task dependency graph
-- Project reasoning
-
----
-
-## Milestone 4
-
-### Code Generation
-
-- Multi-file generation
-- Repository creation
-- Project templates
-- Agent memory
+- [x] Requirement Analyzer
+- [x] Planner Agent
+- [x] Planner API
+- [x] Premium Frontend
+- [x] Design System
+- [x] Cursor-style Planner
+- [x] Animated Results
+- [x] Project History
+- [ ] Command Palette
+- [ ] Toast Notifications
+- [ ] Settings
+- [ ] Code Generator Agent
+- [ ] Execution Agent
+- [ ] Reviewer Agent
+- [ ] LLM Integration
+- [ ] GitHub Integration
+- [ ] Production Deployment
 
 ---
 
-## Milestone 5
-
-### Autonomous Execution
-
-- Execution Agent
-- Debugging Agent
-- Self-healing workflow
-- Reviewer Agent
-- Multi-agent orchestration
-
----
-
-## Milestone 6
-
-### Production Platform
-
-- Authentication
-- Project history
-- Team workspaces
-- GitHub integration
-- Docker execution
-- Cloud deployment
-- Real-time collaboration
-
----
-
-# Development Philosophy
-
-Forge is built using production software engineering principles.
-
-Every feature follows the same workflow:
-
-1. Design
-2. Implement
-3. Test
-4. Commit
-5. Document
-6. Iterate
-
-The project prioritizes modularity, scalability, and maintainability to support future AI capabilities such as LLM reasoning, streaming execution, autonomous coding, and distributed multi-agent orchestration.
-
----
-
-# Project Status
+# Current Status
 
 | Component | Status |
-|-----------|--------|
-| Backend API | ✅ |
+|------------|--------|
+| FastAPI Backend | ✅ |
 | Requirement Analyzer | ✅ |
 | Planner Agent | ✅ |
-| Frontend MVP | ✅ |
+| Planner API | ✅ |
+| Premium Frontend | ✅ |
 | Design System | ✅ |
 | Planner Workspace | ✅ |
-| Results Dashboard | ✅ |
-| Agent Timeline | ✅ |
+| Animated Results | ✅ |
+| Project History | ✅ |
+| Multi-Agent Pipeline | ✅ |
 | Code Generator | 🚧 |
-| Execution Engine | 🚧 |
+| Execution Agent | 🚧 |
 | Reviewer Agent | 🚧 |
-| Multi-Agent Orchestration | 🚧 |
 | LLM Integration | 🚧 |
-| Production Deployment | 🚧 |
 
 ---
+
+## Future Vision
+
+Forge is being developed into a fully autonomous AI software engineering platform capable of planning, generating, executing, debugging, reviewing, and deploying complete software projects through collaborative AI agents.
