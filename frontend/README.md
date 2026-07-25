@@ -1,87 +1,52 @@
-# Forge AI Engineer 🚀
+# Forge AI Engineer Frontend
 
-> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured implementation plans through a modular AI agent pipeline.**
-
-**Status:** 🚧 Active Development • Planning Engine ✅ • Premium Frontend MVP ✅
+A premium React frontend for **Forge AI Engineer**, an autonomous multi-agent AI software engineering platform. The frontend provides a modern AI workspace inspired by Cursor, Claude, OpenAI Playground, Vercel, and Linear while communicating with the FastAPI backend.
 
 ---
 
-# Overview
+# Features
 
-Forge AI Engineer is an AI-native software engineering platform built around specialized autonomous agents. Instead of relying on a single monolithic model, Forge decomposes software development into independent reasoning stages where each agent owns a specific responsibility.
+## Workspace
 
-The current implementation focuses on intelligent project planning, while the architecture is designed to evolve into a complete autonomous software engineering workflow capable of planning, generating, executing, reviewing, and deploying production-ready applications.
+- Premium landing page
+- Cursor-inspired planner workspace
+- Auto-resizing prompt editor
+- Keyboard shortcut (`Ctrl/Cmd + Enter`)
+- Responsive layout
+- Sticky navigation
+- Workspace sidebar
+- Persistent project history (Local Storage)
 
----
+## Planner
 
-# AI Pipeline
+- Requirement submission
+- Planner API integration
+- Animated loading state
+- Interactive implementation roadmap
+- Metadata dashboard
+- Expandable task cards
 
-```text
-                 User Prompt
-                      │
-                      ▼
-          Requirement Analyzer ✅
-                      │
-                      ▼
-              Planner Agent ✅
-                      │
-                      ▼
-      Code Generator Agent 🚧
-                      │
-                      ▼
-        Execution Agent 🚧
-                      │
-                      ▼
-         Reviewer Agent 🚧
-                      │
-                      ▼
-          Production Software
-```
+## AI Experience
 
----
+- Multi-agent execution timeline
+- AI pipeline visualization
+- Animated transitions with Framer Motion
+- Premium glassmorphism UI
+- Aurora background
+- Grid background
+- Reusable design system
 
-# Current Features
+## Command Palette
 
-## Backend
-
-- ✅ Requirement Analyzer
-- ✅ Planner Agent
-- ✅ Dynamic implementation roadmap generation
-- ✅ FastAPI REST API
-- ✅ Framework detection
-- ✅ Database detection
-- ✅ Project metadata extraction
-- ✅ Modular service architecture
-- ✅ Unit tested planning workflow
-
----
-
-## Frontend
-
-- ✅ Premium landing page
-- ✅ Animated hero section
-- ✅ Aurora & grid background effects
-- ✅ Sticky navigation
-- ✅ Responsive layout
-- ✅ Cursor-inspired planner workspace
-- ✅ Auto-resizing prompt editor
-- ✅ Keyboard shortcuts (Ctrl/Cmd + Enter)
-- ✅ Animated loading experience
-- ✅ Interactive planner results
-- ✅ Metadata dashboard
-- ✅ Animated task cards
-- ✅ Multi-agent execution pipeline visualization
-- ✅ Workspace sidebar
-- ✅ Persistent project history
-- ✅ Reusable UI component library
-- ✅ Framer Motion animations
-- 🚧 Global Command Palette (In Progress)
+- Global `⌘K / Ctrl + K` shortcut
+- Extensible command registry
+- Searchable command interface
+- Dynamic recent project registration
+- Keyboard navigation
 
 ---
 
 # Tech Stack
-
-## Frontend
 
 - React 19
 - TypeScript
@@ -89,87 +54,37 @@ The current implementation focuses on intelligent project planning, while the ar
 - Tailwind CSS v4
 - Framer Motion
 - Lucide React
-- cmdk (Command Palette)
-
-## Backend
-
-- FastAPI
-- Python
-- Pydantic
-- Pytest
+- cmdk
 
 ---
 
-# Repository Structure
+# Folder Structure
 
 ```text
-forge-ai-engineer/
-
-├── backend/
-│   ├── app/
-│   ├── agents/
-│   ├── api/
-│   ├── schemas/
-│   ├── services/
-│   ├── models/
-│   └── tests/
+src/
 │
-├── frontend/
-│   └── src/
-│       ├── api/
-│       ├── assets/
-│       ├── components/
-│       │
-│       ├── hero/
-│       ├── layout/
-│       ├── pipeline/
-│       ├── planner/
-│       ├── ui/
-│       └── command/
+├── api/
+├── assets/
+├── components/
+│   ├── command/
+│   ├── hero/
+│   ├── layout/
+│   ├── pipeline/
+│   ├── planner/
+│   └── ui/
 │
-│       ├── pages/
-│       ├── services/
-│       ├── types/
-│       ├── App.tsx
-│       └── main.tsx
+├── pages/
+├── services/
+├── types/
 │
-└── README.md
+├── App.tsx
+├── main.tsx
+└── index.css
 ```
 
 ---
 
-# System Architecture
-
-```text
-                    React Frontend
-                           │
-                           ▼
-                  Planner Workspace
-                           │
-                           ▼
-                    POST /plan API
-                           │
-                           ▼
-               Requirement Analyzer
-                           │
-             ┌─────────────┴─────────────┐
-             ▼                           ▼
-      Project Metadata           Planner Agent
-             │                           │
-             └─────────────┬─────────────┘
-                           ▼
-               Implementation Plan
-                           │
-                           ▼
-                Interactive Planner UI
-                           │
-                           ▼
-             Persistent Project History
-```
-
----
-
-# Frontend Architecture
+# Current Architecture
 
 ```text
 Home
@@ -177,187 +92,104 @@ Home
  ├── Navbar
  ├── Hero
  ├── Sidebar
+ │
  ├── Planner Workspace
- │     ├── PlannerForm
- │     ├── LoadingState
- │     ├── EmptyState
- │     └── PlannerResults
- │           ├── Metadata Cards
- │           └── Task Cards
+ │     ├── Planner Form
+ │     ├── Loading State
+ │     ├── Empty State
+ │     └── Planner Results
+ │            ├── Metadata Cards
+ │            └── Task Cards
  │
  ├── Agent Timeline
+ │
+ ├── Command Palette
+ │     ├── Command Provider
+ │     └── Command Registry
+ │
  └── Footer
 ```
 
 ---
 
-# Development Progress
+# Development
 
-## ✅ Planning Engine
-
-- Requirement Analyzer
-- Planner Agent
-- Dynamic roadmap generation
-- REST API
-- Local persistence
-- Unit testing
-
----
-
-## ✅ Premium Frontend
-
-- Landing page
-- Workspace
-- Cursor-inspired prompt editor
-- Animated planner results
-- Responsive layout
-- Sidebar
-- Project history
-- Design system
-- Premium UI animations
-
----
-
-## 🚧 Currently Building
-
-- Global Command Palette
-- Toast Notification System
-- Settings Modal
-- Mobile Navigation
-- Error Boundary
-- Global Loading Overlay
-- Accessibility improvements
-- Theme polish
-
----
-
-## 📍 Future Milestones
-
-### Intelligent Planning
-
-- LLM-powered planning
-- Streaming responses
-- Reasoning traces
-- Task dependency graph
-
-### Autonomous Coding
-
-- Code Generator Agent
-- Multi-file generation
-- Repository scaffolding
-- Framework templates
-
-### Autonomous Execution
-
-- Execution Agent
-- Reviewer Agent
-- Self-healing workflows
-- Multi-agent orchestration
-
-### Production Platform
-
-- Authentication
-- GitHub integration
-- Docker execution
-- Cloud project storage
-- Team workspaces
-- Real-time collaboration
-
----
-
-# Running the Project
-
-## Backend
+## Install dependencies
 
 ```bash
-cd backend
-
-python3 -m venv venv
-
-source venv/bin/activate
-
-pip install -r requirements.txt
-
-uvicorn app.main:app --reload
+npm install
 ```
 
-## Frontend
+## Run the development server
 
 ```bash
-cd frontend
-
-npm install
-
 npm run dev
 ```
 
----
+## Build for production
 
-# Development Philosophy
+```bash
+npm run build
+```
 
-Forge AI Engineer is designed as a production-oriented software engineering platform rather than a prototype. Every feature is implemented with modularity, scalability, and long-term maintainability in mind, enabling future capabilities such as streaming LLM reasoning, autonomous code generation, execution engines, and collaborative multi-agent workflows without major architectural changes.
+## Preview the production build
+
+```bash
+npm run preview
+```
 
 ---
 
 # Roadmap
 
-## Backend
+## ✅ Completed
 
-- [x] Requirement Analyzer
-- [x] Planner Agent
-- [x] Planner API
-- [ ] Code Generator Agent
-- [ ] Execution Agent
-- [ ] Reviewer Agent
-- [ ] LLM Integration
+- Premium landing page
+- Sticky navigation
+- Hero section
+- Aurora & grid background effects
+- Cursor-inspired planner workspace
+- Auto-resizing prompt editor
+- Keyboard shortcut (`Ctrl/Cmd + Enter`)
+- Planner API integration
+- Animated loading state
+- Interactive planner results
+- Metadata dashboard
+- Animated task cards
+- Multi-agent pipeline visualization
+- Workspace sidebar
+- Persistent project history
+- Reusable UI component library
+- Responsive layout
+- Frontend deployment (Vercel)
+- Global command palette foundation
 
-## Frontend
+## 🚧 In Progress
 
-- [x] Premium Landing Page
-- [x] Cursor-style Planner Workspace
-- [x] Animated Results
-- [x] Workspace Sidebar
-- [x] Project History
-- [x] Design System
-- [ ] Command Palette
-- [ ] Toast Notifications
-- [ ] Settings
-- [ ] Mobile Navigation
-- [ ] Accessibility
-- [ ] Theme Polish
+- Command palette polish
+- Toast notification system
+- Settings modal
+- Mobile navigation drawer
+- Global loading overlay
+- Error boundary
+- Custom 404 page
+- Theme polish
+- Accessibility improvements
+- Animation refinements
 
-## Platform
+## 📍 Planned
 
-- [ ] Authentication
-- [ ] GitHub Integration
-- [ ] Docker Execution
-- [ ] Cloud Projects
-- [ ] Team Workspaces
-- [ ] Production Deployment
-
----
-
-# Current Status
-
-| Component | Status |
-|-----------|--------|
-| FastAPI Backend | ✅ |
-| Requirement Analyzer | ✅ |
-| Planner Agent | ✅ |
-| Planner API | ✅ |
-| Premium Frontend | ✅ |
-| Planner Workspace | ✅ |
-| Project History | ✅ |
-| Design System | ✅ |
-| Multi-Agent Pipeline | ✅ |
-| Command Palette | 🚧 |
-| Code Generator Agent | 🚧 |
-| Execution Agent | 🚧 |
-| Reviewer Agent | 🚧 |
-| LLM Integration | 🚧 |
+- Streaming LLM responses
+- Code generation workspace
+- Execution dashboard
+- Reviewer interface
+- Authentication
+- GitHub integration
+- Team workspaces
+- Real-time collaboration
 
 ---
 
-# Future Vision
+# Design Philosophy
 
-Forge AI Engineer is evolving into a fully autonomous AI software engineering platform capable of understanding requirements, planning architecture, generating production-ready code, executing workflows, reviewing implementations, and deploying complete software projects through collaborative AI agents.
+The frontend is built as a scalable AI workspace rather than a traditional CRUD application. Components are modular, reusable, and designed to support future capabilities such as streaming AI responses, multi-agent orchestration, DAG visualization, authentication, GitHub integration, and collaborative software engineering workflows without major architectural changes.
