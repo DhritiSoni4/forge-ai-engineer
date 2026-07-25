@@ -1,5 +1,11 @@
-import type { HistoryProject } from "../../types/history";
+import type { ComponentType } from "react";
+import type { LucideProps } from "lucide-react";
+import {
+  FolderGit2,
+  LayoutDashboard,
+} from "lucide-react";
 
+import type { HistoryProject } from "../../types/history";
 export interface CommandItem {
   id: string;
   title: string;
@@ -7,6 +13,7 @@ export interface CommandItem {
   keywords?: string[];
   group: string;
   shortcut?: string;
+  icon?: ComponentType<LucideProps>;
   action: () => void;
 }
 
@@ -67,6 +74,7 @@ export function registerDefaultCommands() {
     title: "Agent Timeline",
     subtitle: "View execution pipeline",
     group: "Navigation",
+    icon: LayoutDashboard,
     keywords: ["pipeline", "timeline"],
     action: () => {
       document
@@ -82,6 +90,7 @@ export function registerDefaultCommands() {
     title: "Open GitHub Repository",
     subtitle: "Forge AI Engineer",
     group: "Links",
+    icon: FolderGit2,
     keywords: ["github", "repository"],
     action: () => {
       window.open(
@@ -105,6 +114,7 @@ export function registerRecentProjects(
       title: project.plan.project_name,
       subtitle: project.prompt,
       group: "Projects",
+      icon: FolderGit2,
       keywords: [
         project.plan.project_name,
         project.prompt,
