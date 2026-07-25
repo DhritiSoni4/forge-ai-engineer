@@ -8,7 +8,7 @@ export interface CommandItem {
   action: () => void;
 }
 
-export class CommandRegistry {
+class CommandRegistry {
   private commands = new Map<string, CommandItem>();
 
   register(command: CommandItem) {
@@ -19,8 +19,8 @@ export class CommandRegistry {
     this.commands.delete(id);
   }
 
-  getCommands() {
-    return Array.from(this.commands.values()).sort((a, b) => {
+  getCommands(): CommandItem[] {
+    return [...this.commands.values()].sort((a, b) => {
       if (a.group === b.group) {
         return a.title.localeCompare(b.title);
       }
@@ -41,10 +41,10 @@ export function registerDefaultCommands() {
 
   commandRegistry.register({
     id: "planner",
-    title: "Planner",
-    subtitle: "Go to planner workspace",
+    title: "Planner Workspace",
+    subtitle: "Scroll to the planner",
     group: "Navigation",
-    keywords: ["plan", "workspace", "home"],
+    keywords: ["planner", "workspace", "home"],
     action: () => {
       window.scrollTo({
         top: 0,
@@ -55,13 +55,13 @@ export function registerDefaultCommands() {
 
   commandRegistry.register({
     id: "agents",
-    title: "Agents",
-    subtitle: "Go to execution pipeline",
+    title: "Agent Timeline",
+    subtitle: "View execution pipeline",
     group: "Navigation",
-    keywords: ["timeline", "pipeline"],
+    keywords: ["agents", "pipeline", "timeline"],
     action: () => {
       document
-        .querySelector("#agents")
+        .getElementById("agents")
         ?.scrollIntoView({
           behavior: "smooth",
         });
@@ -73,7 +73,7 @@ export function registerDefaultCommands() {
     title: "Open GitHub Repository",
     subtitle: "Forge AI Engineer",
     group: "Links",
-    keywords: ["repo", "source", "code"],
+    keywords: ["github", "repository", "source"],
     action: () => {
       window.open(
         "https://github.com/DhritiSoni4/forge-ai-engineer",
