@@ -1,3 +1,5 @@
+import type { HistoryProject } from "../../types/history";
+
 export interface CommandItem {
   id: string;
   title: string;
@@ -17,6 +19,12 @@ class CommandRegistry {
 
   unregister(id: string) {
     this.commands.delete(id);
+  }
+
+  clearGroup(group: string) {
+    [...this.commands.values()]
+      .filter((command) => command.group === group)
+      .forEach((command) => this.commands.delete(command.id));
   }
 
   getCommands(): CommandItem[] {
@@ -42,9 +50,10 @@ export function registerDefaultCommands() {
   commandRegistry.register({
     id: "planner",
     title: "Planner Workspace",
-    subtitle: "Scroll to the planner",
+    subtitle: "Scroll to planner",
     group: "Navigation",
-    keywords: ["planner", "workspace", "home"],
+    keywords: ["planner", "workspace"],
+    shortcut: "⌘P",
     action: () => {
       window.scrollTo({
         top: 0,
@@ -58,7 +67,7 @@ export function registerDefaultCommands() {
     title: "Agent Timeline",
     subtitle: "View execution pipeline",
     group: "Navigation",
-    keywords: ["agents", "pipeline", "timeline"],
+    keywords: ["pipeline", "timeline"],
     action: () => {
       document
         .getElementById("agents")
@@ -73,7 +82,7 @@ export function registerDefaultCommands() {
     title: "Open GitHub Repository",
     subtitle: "Forge AI Engineer",
     group: "Links",
-    keywords: ["github", "repository", "source"],
+    keywords: ["github", "repository"],
     action: () => {
       window.open(
         "https://github.com/DhritiSoni4/forge-ai-engineer",
@@ -81,5 +90,26 @@ export function registerDefaultCommands() {
         "noopener,noreferrer"
       );
     },
+  });
+}
+
+export function registerRecentProjects(
+  history: HistoryProject[],
+  onSelect: (project: HistoryProject) => void
+) {
+  commandRegistry.clearGroup("Projects");
+
+  history.slice(0, 10).forEach((project) => {
+    commandRegistry.register({
+      id: `project-${project.id}`,
+      title: project.plan.project_name,
+      subtitle: project.prompt,
+      group: "Projects",
+      keywords: [
+        project.plan.project_name,
+        project.prompt,
+      ],
+      action: () => onSelect(project),
+    });
   });
 }

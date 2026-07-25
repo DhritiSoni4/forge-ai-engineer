@@ -11,7 +11,7 @@ import PlannerResults from "../components/planner/PlannerResults";
 import EmptyState from "../components/ui/EmptyState";
 import LoadingState from "../components/ui/LoadingState";
 import Card from "../components/ui/Card";
-
+import { registerRecentProjects } from "../components/command/commands";
 import AgentTimeline from "../components/pipeline/AgentTimeline";
 
 import { getPlan } from "../api/planner";
@@ -40,6 +40,12 @@ function Home() {
     setHistory(getHistory());
   }, []);
 
+  useEffect(() => {
+    registerRecentProjects(
+      history,
+      handleRestoreProject
+    );
+  }, [history]);
   const handleGeneratePlan = async () => {
     if (!description.trim()) return;
 
