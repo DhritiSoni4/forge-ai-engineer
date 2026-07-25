@@ -7,7 +7,7 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-
+import CommandPalette from "./CommandPalette";
 import { registerDefaultCommands } from "./commands";
 
 interface CommandContextValue {
@@ -61,10 +61,11 @@ export function CommandProvider({
   );
 
   return (
-    <CommandContext.Provider value={value}>
-      {children}
-    </CommandContext.Provider>
-  );
+  <CommandContext.Provider value={value}>
+    {children}
+    <CommandPalette />
+  </CommandContext.Provider>
+);
 }
 
 export function useCommandPalette() {
