@@ -1,42 +1,42 @@
 # Forge AI Engineer 🚀
 
-> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured software implementation plans, with future support for autonomous code generation, execution, and software review.**
+> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured software implementation plans, with a modular architecture designed for autonomous code generation, execution, and software review.**
 
-> **Current Status:** 🚧 Milestone 2 – Frontend MVP
+> **Current Status:** 🚧 Milestone 2 – Premium Frontend & Planning Engine
 
 ---
 
-## Vision
+# Vision
 
-Software development is becoming increasingly AI-assisted, but today's tools still require engineers to manually coordinate planning, implementation, debugging, and review.
+Software development is becoming increasingly AI-assisted, yet most tools still require developers to manually coordinate planning, implementation, debugging, and review.
 
 **Forge AI Engineer** explores a different approach.
 
-Instead of relying on a single AI model, Forge is designed as a team of specialized AI agents, each responsible for one stage of the software engineering lifecycle.
+Instead of relying on a single AI model, Forge is designed as a team of specialized AI agents, where each agent owns a distinct phase of the software engineering lifecycle.
 
 ```text
-User Prompt
-      │
-      ▼
-Requirement Analyzer
-      │
-      ▼
-Planner Agent
-      │
-      ▼
-Code Generator Agent
-      │
-      ▼
-Execution Agent
-      │
-      ▼
-Reviewer Agent
-      │
-      ▼
-Completed Software Project
+                 User Prompt
+                      │
+                      ▼
+          Requirement Analyzer
+                      │
+                      ▼
+              Planner Agent
+                      │
+                      ▼
+        Code Generator Agent
+                      │
+                      ▼
+          Execution Agent
+                      │
+                      ▼
+           Reviewer Agent
+                      │
+                      ▼
+           Completed Software
 ```
 
-Each agent is modular, independently replaceable, and designed to scale as more advanced reasoning models become available.
+Each agent is modular, independently replaceable, and designed to scale as more capable reasoning models become available.
 
 ---
 
@@ -48,19 +48,50 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 - ✅ Modular service architecture
 - ✅ Requirement Analyzer
 - ✅ Planner Agent
-- ✅ Dynamic implementation plan generation
-- ✅ Structured API responses
+- ✅ Dynamic implementation roadmap generation
+- ✅ Structured REST API
+- ✅ Project metadata extraction
+- ✅ Framework detection
+- ✅ Database detection
 - ✅ Unit testing with Pytest
+
+---
 
 ## Frontend
 
-- ✅ React + TypeScript + Vite
-- ✅ Planner workspace
+### Workspace
+
+- ✅ Premium landing page
+- ✅ Sticky navigation
+- ✅ Responsive layout
+- ✅ Workspace sidebar
+- ✅ Persistent project history
+- ✅ Cursor-inspired planner workspace
+- ✅ Auto-resizing prompt editor
+- ✅ Keyboard shortcuts (Ctrl/Cmd + Enter)
+
+### Planner
+
 - ✅ Backend API integration
-- ✅ Dynamic project metadata display
-- ✅ Responsive landing page
-- ✅ Modular component architecture
-- 🚧 Premium UI redesign in progress
+- ✅ Animated loading experience
+- ✅ Interactive implementation roadmap
+- ✅ Metadata dashboard
+- ✅ Animated task cards
+
+### AI Experience
+
+- ✅ Multi-agent execution timeline
+- ✅ AI pipeline visualization
+- ✅ Framer Motion animations
+- ✅ Aurora background
+- ✅ Premium glassmorphism UI
+- ✅ Reusable component library
+
+### Command Palette
+
+- 🚧 Global Command Palette
+- 🚧 Dynamic command registry
+- 🚧 Recent project commands
 
 ---
 
@@ -68,10 +99,13 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 
 ## Frontend
 
-- React
+- React 19
 - TypeScript
 - Vite
-- Tailwind CSS
+- Tailwind CSS v4
+- Framer Motion
+- Lucide React
+- cmdk
 
 ## Backend
 
@@ -82,7 +116,7 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 
 ---
 
-# Current Architecture
+# Repository Structure
 
 ```text
 forge-ai-engineer/
@@ -99,12 +133,21 @@ forge-ai-engineer/
 │   └── tests/
 │
 ├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── types/
-│   │   └── App.tsx
+│   └── src/
+│       ├── api/
+│       ├── assets/
+│       ├── components/
+│       │   ├── command/
+│       │   ├── hero/
+│       │   ├── layout/
+│       │   ├── pipeline/
+│       │   ├── planner/
+│       │   └── ui/
+│       ├── pages/
+│       ├── services/
+│       ├── types/
+│       ├── App.tsx
+│       └── main.tsx
 │
 ├── docs/
 │
@@ -113,27 +156,33 @@ forge-ai-engineer/
 
 ---
 
-# Current Planning Pipeline
+# Current Architecture
 
 ```text
-User Prompt
-      │
-      ▼
-FastAPI API
-      │
-      ▼
-Planner Service
-      │
- ┌────┴─────────────┐
- ▼                  ▼
-Requirement     Planner
-Analyzer         Agent
- │                  │
- ▼                  ▼
-Project Metadata    Tasks
-        │
-        ▼
- Planner Response
+                    React Frontend
+                           │
+                           ▼
+                  Planner Workspace
+                           │
+                           ▼
+                    POST /plan API
+                           │
+                           ▼
+               Requirement Analyzer
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+      Project Metadata           Planner Agent
+             │                           │
+             └─────────────┬─────────────┘
+                           ▼
+               Implementation Plan
+                           │
+                           ▼
+                Interactive Planner UI
+                           │
+                           ▼
+             Persistent Project History
 ```
 
 ---
@@ -184,46 +233,51 @@ Build a FastAPI weather API with PostgreSQL
 
 ## ✅ Milestone 1 — Planning Backend
 
-Completed:
+Completed
 
 - FastAPI backend
 - Requirement Analyzer
 - Planner Agent
 - Dynamic implementation planning
+- REST API
 - Unit tests
 
 ---
 
-## 🚧 Milestone 2 — Frontend MVP (Current)
+## 🚧 Milestone 2 — Premium Frontend
 
-In Progress:
+Current Progress
 
-- Premium React interface
+- Premium landing page
 - Planner workspace
-- Project metadata visualization
-- Task roadmap visualization
+- Metadata dashboard
+- Task visualization
 - Responsive UI
-- Modern design system
+- Project history
+- Multi-agent timeline
+- Command palette
+- Design system
 
 ---
 
 ## 🔜 Milestone 3 — Intelligent Planning
 
-Planned:
+Planned
 
 - LLM-powered Planner Agent
+- Streaming responses
 - Rich reasoning
-- Dependency-aware task planning
+- Dependency-aware planning
 - DAG visualization
 
 ---
 
 ## 🔜 Milestone 4 — Autonomous Code Generation
 
-Planned:
+Planned
 
 - Code Generator Agent
-- Multi-file project generation
+- Multi-file generation
 - Repository scaffolding
 - Framework-aware generation
 
@@ -231,13 +285,13 @@ Planned:
 
 ## 🔜 Milestone 5 — Autonomous Software Engineering
 
-Planned:
+Planned
 
 - Execution Agent
-- Debugging Agent
 - Reviewer Agent
+- Self-healing workflows
 - Multi-agent orchestration
-- Streaming agent reasoning
+- Live execution logs
 - End-to-end software generation
 
 ---
@@ -248,11 +302,13 @@ Planned:
 
 ```bash
 cd backend
+
 pip install -r requirements.txt
+
 uvicorn app.main:app --reload
 ```
 
-Run tests:
+Run tests
 
 ```bash
 python -m pytest
@@ -264,7 +320,9 @@ python -m pytest
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
@@ -272,20 +330,12 @@ npm run dev
 
 # Development Philosophy
 
-Forge is built incrementally using production software engineering practices.
+Forge is built as a production-oriented software engineering platform rather than a prototype.
 
-Every milestone follows the same workflow:
-
-1. Build a working vertical slice.
-2. Verify functionality through testing.
-3. Commit meaningful, production-ready changes.
-4. Update documentation.
-5. Iterate toward a scalable architecture.
-
-This approach keeps the project stable while allowing rapid experimentation with autonomous AI agents.
+Every feature is developed as a complete vertical slice with an emphasis on modularity, scalability, maintainability, and clean architecture. This enables future capabilities—such as streaming LLM reasoning, autonomous code generation, execution engines, GitHub integration, and collaborative multi-agent workflows—to be added without significant architectural changes.
 
 ---
 
 # Future Vision
 
-Forge aims to become an autonomous AI software engineer capable of understanding software requirements, planning implementation, generating production-ready code, executing projects, and reviewing results through a coordinated multi-agent architecture.
+Forge aims to evolve into a fully autonomous AI software engineer capable of understanding requirements, planning architecture, generating production-ready code, executing software, reviewing implementations, and deploying complete projects through coordinated AI agents.
