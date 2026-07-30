@@ -16,7 +16,8 @@ export interface CommandItem {
   icon?: ComponentType<LucideProps>;
   action: () => void;
 }
-
+const RECENT_COMMANDS_KEY = "forge-recent-commands";
+const MAX_RECENT_COMMANDS = 8;
 class CommandRegistry {
   private commands = new Map<string, CommandItem>();
 
@@ -33,16 +34,57 @@ class CommandRegistry {
       .filter((command) => command.group === group)
       .forEach((command) => this.commands.delete(command.id));
   }
-
-  getCommands(): CommandItem[] {
-    return [...this.commands.values()].sort((a, b) => {
-      if (a.group === b.group) {
-        return a.title.localeCompare(b.title);
+  private getRecentIds(): string[] {
+    try {
+      const stored = localStorage.getItem(RECENT_COMMANDS_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
       }
 
-      return a.group.localeCompare(b.group);
-    });
+  private saveRecentIds(ids: string[]) {
+    localStorage.setItem(
+      RECENT_COMMANDS_KEY,
+      JSON.stringify(ids)
+    );
+    }
+
+  markAsUsed(id: string) {
+    const recent = this.getRecentIds().filter(
+      (item) => item !== id
+    );
+
+    recent.unshift(id);
+
+    this.saveRecentIds(
+      recent.slice(0, MAX_RECENT_COMMANDS)
+    );
   }
+
+  getCommands(): CommandItem[] {
+  const recentIds = this.getRecentIds();
+
+  const commands = [...this.commands.values()];
+
+  return commands.sort((a, b) => {
+    const aRecent = recentIds.indexOf(a.id);
+    const bRecent = recentIds.indexOf(b.id);
+
+    if (aRecent !== -1 || bRecent !== -1) {
+      if (aRecent === -1) return 1;
+      if (bRecent === -1) return -1;
+
+      return aRecent - bRecent;
+    }
+
+    if (a.group === b.group) {
+      return a.title.localeCompare(b.title);
+    }
+
+    return a.group.localeCompare(b.group);
+  });
+}
 
   clear() {
     this.commands.clear();
