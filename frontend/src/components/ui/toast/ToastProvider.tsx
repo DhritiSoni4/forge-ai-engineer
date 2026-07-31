@@ -7,7 +7,7 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-
+import ToastContainer from "./ToastContainer";
 export type ToastVariant =
   | "success"
   | "error"
@@ -74,10 +74,11 @@ export function ToastProvider({
   );
 
   return (
-    <ToastContext.Provider value={value}>
-      {children}
-    </ToastContext.Provider>
-  );
+  <ToastContext.Provider value={value}>
+    {children}
+    <ToastContainer />
+  </ToastContext.Provider>
+);
 }
 
 export function useToast() {
