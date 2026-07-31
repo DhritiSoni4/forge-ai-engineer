@@ -11,6 +11,8 @@ import PlannerResults from "../components/planner/PlannerResults";
 import EmptyState from "../components/ui/EmptyState";
 import LoadingState from "../components/ui/LoadingState";
 import Card from "../components/ui/Card";
+import { useToast } from "../components/ui/toast/ToastProvider";
+
 import { registerRecentProjects } from "../components/command/commands";
 import AgentTimeline from "../components/pipeline/AgentTimeline";
 
@@ -27,25 +29,17 @@ import type { HistoryProject } from "../types/history";
 
 function Home() {
   const [description, setDescription] = useState("");
-
   const [plan, setPlan] = useState<PlannerResponse | null>(null);
-
   const [history, setHistory] = useState<HistoryProject[]>([]);
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     setHistory(getHistory());
   }, []);
 
-  useEffect(() => {
-    registerRecentProjects(
-      history,
-      handleRestoreProject
-    );
-  }, [history]);
   const handleGeneratePlan = async () => {
     if (!description.trim()) return;
 
@@ -57,6 +51,13 @@ function Home() {
 
       setPlan(response);
 
+      showToast({
+        variant: "success",
+        title: "Plan generated",
+        description:
+          "Implementation roadmap created successfully.",
+      });
+
       const updatedHistory = saveProject(
         description,
         response,
@@ -65,6 +66,13 @@ function Home() {
       setHistory(updatedHistory);
     } catch {
       setError("Failed to generate implementation plan.");
+
+      showToast({
+        variant: "error",
+        title: "Generation failed",
+        description:
+          "Unable to generate the implementation plan.",
+      });
     } finally {
       setLoading(false);
     }
@@ -77,11 +85,24 @@ function Home() {
 
     setPlan(project.plan);
 
+    showToast({
+      variant: "info",
+      title: "Project restored",
+      description: project.plan.project_name,
+    });
+
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
+
+  useEffect(() => {
+    registerRecentProjects(
+      history,
+      handleRestoreProject
+    );
+  }, [history, handleRestoreProject]);
 
   const handleDeleteProject = (id: string) => {
     setHistory(deleteProject(id));
@@ -97,6 +118,12 @@ function Home() {
         setPlan(null);
       }
     }
+
+    showToast({
+      variant: "warning",
+      title: "Project deleted",
+      description: "Removed from local history.",
+    });
   };
 
   return (
@@ -106,7 +133,6 @@ function Home() {
       <Hero />
 
       <main className="mx-auto flex max-w-7xl gap-8 px-6 pb-32">
-
         <Sidebar
           history={history}
           onSelectProject={handleRestoreProject}
@@ -114,9 +140,7 @@ function Home() {
         />
 
         <section className="mx-auto flex-1 max-w-5xl">
-
           <Card className="border border-white/10 bg-white/5 p-10 backdrop-blur-xl">
-
             <h2 className="text-3xl font-bold text-white">
               Describe your project
             </h2>
@@ -137,7 +161,6 @@ function Home() {
                 {error}
               </p>
             )}
-
           </Card>
 
           {loading ? (
@@ -147,9 +170,7 @@ function Home() {
           ) : (
             <EmptyState />
           )}
-
         </section>
-
       </main>
 
       <AgentTimeline />
