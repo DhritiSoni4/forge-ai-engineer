@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
 import Hero from "../components/hero/Hero";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -78,9 +77,8 @@ function Home() {
     }
   };
 
-  const handleRestoreProject = (
-    project: HistoryProject,
-  ) => {
+  const handleRestoreProject = useCallback(
+  (project: HistoryProject) => {
     setDescription(project.prompt);
 
     setPlan(project.plan);
@@ -95,7 +93,9 @@ function Home() {
       top: 0,
       behavior: "smooth",
     });
-  };
+  },
+  [showToast]
+);
 
   useEffect(() => {
     registerRecentProjects(
