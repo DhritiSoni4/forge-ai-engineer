@@ -4,12 +4,19 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 
 import App from "./App";
+
 import { CommandProvider } from "./components/command/CommandProvider";
+import { ToastProvider } from "./components/ui/toast/ToastProvider";
+import { SettingsProvider } from "./components/Settings/SettingsProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CommandProvider>
-      <App />
+      <ToastProvider>
+        <SettingsProvider>
+          <App />
+        </SettingsProvider>
+      </ToastProvider>
     </CommandProvider>
   </StrictMode>
 );
