@@ -1,18 +1,16 @@
 # Forge AI Engineer 🚀
 
-> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured software implementation plans, with a modular architecture designed for autonomous code generation, execution, and software review.**
+> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured software implementation plans through a modular multi-agent architecture.**
 
-> **Current Status:** 🚧 Milestone 2 – Premium Frontend & Planning Engine
+> **Current Status:** 🚧 Milestone 2 – Production Frontend Infrastructure • Planning Engine Complete
 
 ---
 
 # Vision
 
-Software development is becoming increasingly AI-assisted, yet most tools still require developers to manually coordinate planning, implementation, debugging, and review.
+Forge AI Engineer explores a future where software development is coordinated by a team of specialized AI agents rather than a single general-purpose model.
 
-**Forge AI Engineer** explores a different approach.
-
-Instead of relying on a single AI model, Forge is designed as a team of specialized AI agents, where each agent owns a distinct phase of the software engineering lifecycle.
+Each agent owns a dedicated phase of the software engineering lifecycle, enabling modular reasoning, extensibility, and future orchestration.
 
 ```text
                  User Prompt
@@ -33,10 +31,8 @@ Instead of relying on a single AI model, Forge is designed as a team of speciali
            Reviewer Agent
                       │
                       ▼
-           Completed Software
+          Completed Software
 ```
-
-Each agent is modular, independently replaceable, and designed to scale as more capable reasoning models become available.
 
 ---
 
@@ -49,13 +45,10 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 - ✅ Requirement Analyzer
 - ✅ Planner Agent
 - ✅ Dynamic implementation roadmap generation
-- ✅ Structured REST API
 - ✅ Project metadata extraction
-- ✅ Framework detection
-- ✅ Database detection
+- ✅ Framework & database detection
+- ✅ Structured REST API
 - ✅ Unit testing with Pytest
-
----
 
 ## Frontend
 
@@ -68,12 +61,12 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 - ✅ Persistent project history
 - ✅ Cursor-inspired planner workspace
 - ✅ Auto-resizing prompt editor
-- ✅ Keyboard shortcuts (Ctrl/Cmd + Enter)
+- ✅ Keyboard shortcuts (`Ctrl/Cmd + Enter`)
 
-### Planner
+### Planner Experience
 
-- ✅ Backend API integration
-- ✅ Animated loading experience
+- ✅ Planner API integration
+- ✅ Animated loading state
 - ✅ Interactive implementation roadmap
 - ✅ Metadata dashboard
 - ✅ Animated task cards
@@ -82,16 +75,19 @@ Each agent is modular, independently replaceable, and designed to scale as more 
 
 - ✅ Multi-agent execution timeline
 - ✅ AI pipeline visualization
-- ✅ Framer Motion animations
 - ✅ Aurora background
-- ✅ Premium glassmorphism UI
+- ✅ Glassmorphism UI
+- ✅ Framer Motion animations
 - ✅ Reusable component library
 
-### Command Palette
+### Application Infrastructure
 
-- 🚧 Global Command Palette
-- 🚧 Dynamic command registry
-- 🚧 Recent project commands
+- ✅ Global Command Palette (`⌘K / Ctrl + K`)
+- ✅ Dynamic command registry
+- ✅ Recent project commands
+- ✅ Global toast notification system
+- ✅ Error boundary
+- 🚧 Settings system
 
 ---
 
@@ -138,11 +134,14 @@ forge-ai-engineer/
 │       ├── assets/
 │       ├── components/
 │       │   ├── command/
+│       │   ├── error/
 │       │   ├── hero/
 │       │   ├── layout/
 │       │   ├── pipeline/
 │       │   ├── planner/
+│       │   ├── settings/
 │       │   └── ui/
+│       │       └── toast/
 │       ├── pages/
 │       ├── services/
 │       ├── types/
@@ -150,7 +149,6 @@ forge-ai-engineer/
 │       └── main.tsx
 │
 ├── docs/
-│
 └── README.md
 ```
 
@@ -161,12 +159,14 @@ forge-ai-engineer/
 ```text
                     React Frontend
                            │
-                           ▼
-                  Planner Workspace
-                           │
-                           ▼
-                    POST /plan API
-                           │
+            ┌──────────────┴──────────────┐
+            ▼                             ▼
+   Global Providers                Planner Workspace
+(Command • Toast • Error)                 │
+            │                             ▼
+            │                     POST /plan API
+            │                             │
+            └──────────────┬──────────────┘
                            ▼
                Requirement Analyzer
                            │
@@ -179,120 +179,11 @@ forge-ai-engineer/
                Implementation Plan
                            │
                            ▼
-                Interactive Planner UI
+              Interactive Planner UI
                            │
                            ▼
-             Persistent Project History
+            Persistent Project History
 ```
-
----
-
-# Example
-
-## Input
-
-```text
-Build a FastAPI weather API with PostgreSQL
-```
-
-## Output
-
-```json
-{
-  "project_name": "Build a FastAPI weather API with PostgreSQL",
-  "metadata": {
-    "project_type": "backend_api",
-    "frameworks": ["FastAPI"],
-    "language": "Python",
-    "database": "PostgreSQL"
-  },
-  "tasks": [
-    {
-      "id": 1,
-      "title": "Initialize backend project"
-    },
-    {
-      "id": 2,
-      "title": "Configure PostgreSQL database"
-    },
-    {
-      "id": 3,
-      "title": "Implement application logic"
-    },
-    {
-      "id": 4,
-      "title": "Write unit tests"
-    }
-  ]
-}
-```
-
----
-
-# Project Roadmap
-
-## ✅ Milestone 1 — Planning Backend
-
-Completed
-
-- FastAPI backend
-- Requirement Analyzer
-- Planner Agent
-- Dynamic implementation planning
-- REST API
-- Unit tests
-
----
-
-## 🚧 Milestone 2 — Premium Frontend
-
-Current Progress
-
-- Premium landing page
-- Planner workspace
-- Metadata dashboard
-- Task visualization
-- Responsive UI
-- Project history
-- Multi-agent timeline
-- Command palette
-- Design system
-
----
-
-## 🔜 Milestone 3 — Intelligent Planning
-
-Planned
-
-- LLM-powered Planner Agent
-- Streaming responses
-- Rich reasoning
-- Dependency-aware planning
-- DAG visualization
-
----
-
-## 🔜 Milestone 4 — Autonomous Code Generation
-
-Planned
-
-- Code Generator Agent
-- Multi-file generation
-- Repository scaffolding
-- Framework-aware generation
-
----
-
-## 🔜 Milestone 5 — Autonomous Software Engineering
-
-Planned
-
-- Execution Agent
-- Reviewer Agent
-- Self-healing workflows
-- Multi-agent orchestration
-- Live execution logs
-- End-to-end software generation
 
 ---
 
@@ -302,40 +193,86 @@ Planned
 
 ```bash
 cd backend
-
 pip install -r requirements.txt
-
 uvicorn app.main:app --reload
 ```
 
-Run tests
+Run tests:
 
 ```bash
 python -m pytest
 ```
 
----
-
 ## Frontend
 
 ```bash
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
 ---
 
+# Roadmap
+
+## ✅ Completed
+
+- Requirement Analyzer
+- Planner Agent
+- Premium frontend
+- Planner workspace
+- Project history
+- Multi-agent timeline
+- Command palette
+- Toast notifications
+- Error boundary
+
+## 🚧 In Progress
+
+- Settings system
+- Mobile navigation
+- Global loading overlay
+- Theme polish
+- Accessibility improvements
+
+## 🔜 Planned
+
+### Intelligent Planning
+
+- LLM-powered planner
+- Streaming responses
+- Dependency-aware planning
+- DAG visualization
+
+### Autonomous Coding
+
+- Code Generator Agent
+- Repository scaffolding
+- Multi-file generation
+
+### Autonomous Execution
+
+- Execution Agent
+- Reviewer Agent
+- Self-healing workflows
+- Multi-agent orchestration
+
+### Platform
+
+- Authentication
+- GitHub integration
+- Docker execution
+- Team workspaces
+- Real-time collaboration
+
+---
+
 # Development Philosophy
 
-Forge is built as a production-oriented software engineering platform rather than a prototype.
-
-Every feature is developed as a complete vertical slice with an emphasis on modularity, scalability, maintainability, and clean architecture. This enables future capabilities—such as streaming LLM reasoning, autonomous code generation, execution engines, GitHub integration, and collaborative multi-agent workflows—to be added without significant architectural changes.
+Forge is developed using production software engineering practices. Each feature is built as a complete vertical slice with a strong emphasis on modularity, scalability, maintainability, and reusable architecture. This allows future AI capabilities to be integrated without major architectural changes.
 
 ---
 
 # Future Vision
 
-Forge aims to evolve into a fully autonomous AI software engineer capable of understanding requirements, planning architecture, generating production-ready code, executing software, reviewing implementations, and deploying complete projects through coordinated AI agents.
+Forge aims to become a production-grade autonomous software engineering platform capable of understanding requirements, planning architecture, generating production-ready code, executing workflows, reviewing implementations, and orchestrating multiple specialized AI agents through a modern developer workspace.
