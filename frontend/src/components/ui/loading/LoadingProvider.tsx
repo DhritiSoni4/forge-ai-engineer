@@ -7,6 +7,8 @@ import {
   type PropsWithChildren,
 } from "react";
 
+import LoadingOverlay from "./LoadingOverlay";
+
 interface LoadingContextValue {
   isLoading: boolean;
   message: string;
@@ -48,6 +50,7 @@ export function LoadingProvider({
   return (
     <LoadingContext.Provider value={value}>
       {children}
+      <LoadingOverlay />
     </LoadingContext.Provider>
   );
 }
