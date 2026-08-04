@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
+import { LoadingProvider } from "./components/ui/loading/LoadingProvider";
 import "./index.css";
 
 import App from "./App";
@@ -11,15 +11,15 @@ import { ToastProvider } from "./components/ui/toast/ToastProvider";
 import { SettingsProvider } from "./components/Settings/SettingsProvider";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <CommandProvider>
-        <ToastProvider>
-          <SettingsProvider>
-            <App />
-          </SettingsProvider>
-        </ToastProvider>
-      </CommandProvider>
-    </ErrorBoundary>
-  </StrictMode>
+  <ErrorBoundary>
+  <CommandProvider>
+    <ToastProvider>
+      <LoadingProvider>
+        <SettingsProvider>
+          <App />
+        </SettingsProvider>
+      </LoadingProvider>
+    </ToastProvider>
+  </CommandProvider>
+</ErrorBoundary>
 );
