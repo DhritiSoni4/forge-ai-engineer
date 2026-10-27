@@ -5,3 +5,8 @@ export type { Tool, Risk } from "./tools/registry.js";
 export { MockProvider } from "./llm/mock.js";
 export { AnthropicProvider, DEFAULT_ANTHROPIC_MODEL } from "./llm/anthropic.js";
 export type * from "./llm/types.js";
+export { McpManager } from "./mcp/manager.js";
+export type { McpManagerOptions, ServerStatus } from "./mcp/manager.js";
+export { loadMcpConfig, parseMcpConfig } from "./mcp/config.js";
+export { UNTRUSTED_SYSTEM_NOTICE } from "./mcp/untrusted.js";
+export { redact } from "./mcp/redact.js";

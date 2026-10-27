@@ -6,6 +6,7 @@ import type {
   Usage,
 } from "../llm/types.js";
 import type { ToolRegistry } from "../tools/registry.js";
+import { withTimeout } from "../util/timeout.js";
 
 export type RunLimits = {
   maxSteps: number;
@@ -107,7 +108,7 @@ async function runTool(
     const output = await withTimeout(
       tool.execute(call.input),
       limits.toolTimeoutMs,
-      call.name,
+      `Tool ${call.name}`,
     );
     return toolResult(call.id, truncate(output, limits.maxToolOutputChars), false);
   } catch (error) {
@@ -117,17 +118,6 @@ async function runTool(
       true,
     );
   }
-}
-
-function withTimeout<T>(promise: Promise<T>, ms: number, name: string): Promise<T> {
-  let timer: NodeJS.Timeout | undefined;
-  const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () => reject(new Error(`Tool ${name} timed out after ${ms}ms`)),
-      ms,
-    );
-  });
-  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
 function finish(
