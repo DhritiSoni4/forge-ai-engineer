@@ -1,0 +1,48 @@
+{
+  "servers": {
+    "filesystem": {
+      "transport": "stdio",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@2.0.1", "${FORGE_WORKSPACE}"],
+      "allowTools": [
+        "read_text_file",
+        "read_multiple_files",
+        "list_directory",
+        "list_directory_with_sizes",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "list_allowed_directories",
+        "write_file",
+        "edit_file",
+        "create_directory"
+      ],
+      "risk": "read",
+      "toolRisks": {
+        "write_file": "write",
+        "edit_file": "write",
+        "create_directory": "write"
+      }
+    },
+    "github": {
+      "transport": "http",
+      "enabled": true,
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" },
+      "allowTools": [
+        "get_me",
+        "search_repositories",
+        "get_file_contents",
+        "list_issues",
+        "issue_read",
+        "list_pull_requests",
+        "pull_request_read",
+        "list_commits",
+        "search_code",
+        "search_issues"
+      ],
+      "risk": "read"
+    }
+  }
+}
