@@ -1,0 +1,339 @@
+{
+ "meta": {
+  "id": "04-review-rejects-then-revises",
+  "title": "The Reviewer rejects a half-fix; the Coder revises",
+  "lesson": "Visible tests passed after the first attempt, but the reviewer spotted that merge() still assumes sorted input. The revision loop fixes it, and the hidden tests confirm.",
+  "taskId": "04-intervals",
+  "mode": "multi",
+  "scripted": true,
+  "harnessTestsPass": true,
+  "hiddenTestsPass": true,
+  "recorded": "2026-11-14"
+ },
+ "task": "# Fix interval helpers\n\nIntervals are half-open `(start, end)` tuples with `start <= end`. `overlaps(a, b)` is True only when\nthey share at least one point: **touching intervals such as (1, 2) and (2, 3) do NOT overlap**.\n`merge(intervals)` returns a sorted list of merged intervals, combining intervals that overlap\n**or touch**. It must accept unsorted input (including nested intervals) and must not mutate its input.\n",
+ "files": [
+  "intervals.py",
+  "tests/test_visible.py"
+ ],
+ "events": [
+  {
+   "type": "start",
+   "mode": "multi"
+  },
+  {
+   "type": "phase_start",
+   "phase": "planner"
+  },
+  {
+   "type": "agent",
+   "phase": "planner",
+   "event": {
+    "type": "assistant",
+    "step": 1,
+    "text": "1. Make overlaps() strict (half-open).\n2. Make merge() robust."
+   }
+  },
+  {
+   "type": "phase_end",
+   "phase": "planner",
+   "trace": {
+    "name": "planner",
+    "status": "completed",
+    "steps": 1,
+    "usage": {
+     "inputTokens": 1800,
+     "outputTokens": 240
+    },
+    "readOnlyViolation": false
+   }
+  },
+  {
+   "type": "phase_start",
+   "phase": "coder"
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_call",
+    "step": 1,
+    "id": "toolu_8",
+    "name": "write_file",
+    "input": {
+     "path": "intervals.py",
+     "content": "def overlaps(a, b):\n    return a[0] < b[1] and b[0] < a[1]\n\n\ndef merge(intervals):\n    out = []\n    for start, end in intervals:\n        if out and start <= out[-1][1]:\n            out[-1] = (out[-1][0], end)\n        else:\n            out.append((start, end))\n    return out\n"
+    }
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_result",
+    "step": 1,
+    "id": "toolu_8",
+    "name": "write_file",
+    "output": "wrote 275 bytes to intervals.py",
+    "isError": false
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_call",
+    "step": 2,
+    "id": "toolu_9",
+    "name": "run_tests",
+    "input": {}
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_result",
+    "step": 2,
+    "id": "toolu_9",
+    "name": "run_tests",
+    "output": "<untrusted_tool_output server=\"sandbox\" tool=\"run_tests\">\nexit_code: 0\nduration_ms: 238\ntimed_out: false\n--- stdout ---\n..                                                                       [100%]\n2 passed in 0.01s\n\n--- stderr ---\n\n</untrusted_tool_output>",
+    "isError": false
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "assistant",
+    "step": 3,
+    "text": "overlaps() is now strict. Visible tests pass."
+   }
+  },
+  {
+   "type": "phase_end",
+   "phase": "coder",
+   "trace": {
+    "name": "coder",
+    "status": "completed",
+    "steps": 3,
+    "usage": {
+     "inputTokens": 5400,
+     "outputTokens": 720
+    },
+    "readOnlyViolation": false
+   }
+  },
+  {
+   "type": "phase_start",
+   "phase": "reviewer"
+  },
+  {
+   "type": "agent",
+   "phase": "reviewer",
+   "event": {
+    "type": "assistant",
+    "step": 1,
+    "text": "merge() still iterates the input unsorted and overwrites the end instead of taking the max, so nested or unsorted intervals break. The task requires both.\nVERDICT: REJECT"
+   }
+  },
+  {
+   "type": "phase_end",
+   "phase": "reviewer",
+   "trace": {
+    "name": "reviewer",
+    "status": "completed",
+    "steps": 1,
+    "usage": {
+     "inputTokens": 1800,
+     "outputTokens": 240
+    },
+    "readOnlyViolation": false
+   }
+  },
+  {
+   "type": "phase_start",
+   "phase": "coder"
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "assistant",
+    "step": 1,
+    "text": "Fixing merge() as the reviewer asked."
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_call",
+    "step": 1,
+    "id": "toolu_10",
+    "name": "write_file",
+    "input": {
+     "path": "intervals.py",
+     "content": "def overlaps(a, b):\n    return a[0] < b[1] and b[0] < a[1]\n\n\ndef merge(intervals):\n    out = []\n    for start, end in sorted(intervals):\n        if out and start <= out[-1][1]:\n            out[-1] = (out[-1][0], max(out[-1][1], end))\n        else:\n            out.append((start, end))\n    return out\n"
+    }
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_result",
+    "step": 1,
+    "id": "toolu_10",
+    "name": "write_file",
+    "output": "wrote 300 bytes to intervals.py",
+    "isError": false
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_call",
+    "step": 2,
+    "id": "toolu_11",
+    "name": "run_tests",
+    "input": {}
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "tool_result",
+    "step": 2,
+    "id": "toolu_11",
+    "name": "run_tests",
+    "output": "<untrusted_tool_output server=\"sandbox\" tool=\"run_tests\">\nexit_code: 0\nduration_ms: 241\ntimed_out: false\n--- stdout ---\n..                                                                       [100%]\n2 passed in 0.00s\n\n--- stderr ---\n\n</untrusted_tool_output>",
+    "isError": false
+   }
+  },
+  {
+   "type": "agent",
+   "phase": "coder",
+   "event": {
+    "type": "assistant",
+    "step": 3,
+    "text": "merge() now sorts a copy and uses max(); overlaps() is strict."
+   }
+  },
+  {
+   "type": "phase_end",
+   "phase": "coder",
+   "trace": {
+    "name": "coder",
+    "status": "completed",
+    "steps": 3,
+    "usage": {
+     "inputTokens": 5400,
+     "outputTokens": 720
+    },
+    "readOnlyViolation": false
+   }
+  },
+  {
+   "type": "phase_start",
+   "phase": "reviewer"
+  },
+  {
+   "type": "agent",
+   "phase": "reviewer",
+   "event": {
+    "type": "assistant",
+    "step": 1,
+    "text": "Handles unsorted, nested and touching intervals without mutating the input.\nVERDICT: APPROVE"
+   }
+  },
+  {
+   "type": "phase_end",
+   "phase": "reviewer",
+   "trace": {
+    "name": "reviewer",
+    "status": "completed",
+    "steps": 1,
+    "usage": {
+     "inputTokens": 1800,
+     "outputTokens": 240
+    },
+    "readOnlyViolation": false
+   }
+  },
+  {
+   "type": "verification",
+   "testsPass": true,
+   "output": "exit_code: 0\nduration_ms: 233\ntimed_out: false\n--- stdout ---\n..                                                                       [100%]\n2 passed in 0.00s\n\n--- stderr ---\n"
+  },
+  {
+   "type": "done",
+   "result": {
+    "mode": "multi",
+    "diff": "diff --git a/intervals.py b/intervals.py\nindex f14ce8c..edfd558 100644\n--- a/intervals.py\n+++ b/intervals.py\n@@ -1,12 +1,12 @@\n def overlaps(a, b):\n-    return a[0] <= b[1] and b[0] <= a[1]\n+    return a[0] < b[1] and b[0] < a[1]\n \n \n def merge(intervals):\n     out = []\n-    for start, end in intervals:\n+    for start, end in sorted(intervals):\n         if out and start <= out[-1][1]:\n-            out[-1] = (out[-1][0], end)\n+            out[-1] = (out[-1][0], max(out[-1][1], end))\n         else:\n             out.append((start, end))\n     return out\n",
+    "testsPass": true,
+    "testOutput": "exit_code: 0\nduration_ms: 233\ntimed_out: false\n--- stdout ---\n..                                                                       [100%]\n2 passed in 0.00s\n\n--- stderr ---\n",
+    "phases": [
+     {
+      "name": "planner",
+      "status": "completed",
+      "steps": 1,
+      "usage": {
+       "inputTokens": 1800,
+       "outputTokens": 240
+      },
+      "readOnlyViolation": false
+     },
+     {
+      "name": "coder",
+      "status": "completed",
+      "steps": 3,
+      "usage": {
+       "inputTokens": 5400,
+       "outputTokens": 720
+      },
+      "readOnlyViolation": false
+     },
+     {
+      "name": "reviewer",
+      "status": "completed",
+      "steps": 1,
+      "usage": {
+       "inputTokens": 1800,
+       "outputTokens": 240
+      },
+      "readOnlyViolation": false
+     },
+     {
+      "name": "coder",
+      "status": "completed",
+      "steps": 3,
+      "usage": {
+       "inputTokens": 5400,
+       "outputTokens": 720
+      },
+      "readOnlyViolation": false
+     },
+     {
+      "name": "reviewer",
+      "status": "completed",
+      "steps": 1,
+      "usage": {
+       "inputTokens": 1800,
+       "outputTokens": 240
+      },
+      "readOnlyViolation": false
+     }
+    ],
+    "steps": 9,
+    "usage": {
+     "inputTokens": 16200,
+     "outputTokens": 2160
+    },
+    "durationMs": 1604,
+    "reviewerApproved": true
+   }
+  }
+ ]
+}

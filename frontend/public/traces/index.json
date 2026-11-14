@@ -1,0 +1,46 @@
+[
+ {
+  "id": "01-multi-agent-success",
+  "title": "Fix pagination: Planner → Coder → Reviewer",
+  "lesson": "The normal path: a read-only plan, an edit, a test run, a review, then harness verification against hidden tests.",
+  "taskId": "01-pagination",
+  "mode": "multi",
+  "scripted": true,
+  "harnessTestsPass": true,
+  "hiddenTestsPass": true,
+  "recorded": "2026-11-14"
+ },
+ {
+  "id": "02-lying-agent-caught",
+  "title": "A coder claims success but changed nothing",
+  "lesson": "The harness never trusts the model: it re-runs the tests and diffs against git itself, so a false \"all tests pass\" is reported as a failure, even when the reviewer is fooled.",
+  "taskId": "03-lru-cache",
+  "mode": "multi",
+  "scripted": true,
+  "harnessTestsPass": false,
+  "hiddenTestsPass": false,
+  "recorded": "2026-11-14"
+ },
+ {
+  "id": "03-read-only-violation",
+  "title": "The Planner tries to edit code; the harness reverts it",
+  "lesson": "Planner and Reviewer are read-only. Their working tree is hashed before and after each phase, and any change is reverted and flagged, so a planner can't sneak in an edit.",
+  "taskId": "01-pagination",
+  "mode": "multi",
+  "scripted": true,
+  "harnessTestsPass": true,
+  "hiddenTestsPass": true,
+  "recorded": "2026-11-14"
+ },
+ {
+  "id": "04-review-rejects-then-revises",
+  "title": "The Reviewer rejects a half-fix; the Coder revises",
+  "lesson": "Visible tests passed after the first attempt, but the reviewer spotted that merge() still assumes sorted input. The revision loop fixes it, and the hidden tests confirm.",
+  "taskId": "04-intervals",
+  "mode": "multi",
+  "scripted": true,
+  "harnessTestsPass": true,
+  "hiddenTestsPass": true,
+  "recorded": "2026-11-14"
+ }
+]
