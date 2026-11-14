@@ -1,5 +1,6 @@
 import { runAgent, DEFAULT_LIMITS } from "../agent/loop.js";
 import type { RunLimits, RunResult } from "../agent/loop.js";
+import type { AgentEvent } from "../agent/events.js";
 import type { LLMProvider, Usage } from "../llm/types.js";
 import { wrapUntrusted } from "../mcp/untrusted.js";
 import { clip, createSandboxTools, formatExec } from "../sandbox/tools.js";
@@ -34,7 +35,17 @@ export type EngineerResult = {
   error: string | undefined;
 };
 
+export type EngineerEvent =
+  | { type: "start"; mode: EngineerMode }
+  | { type: "phase_start"; phase: PhaseName }
+  | { type: "agent"; phase: PhaseName; event: AgentEvent }
+  | { type: "phase_end"; phase: PhaseName; trace: PhaseTrace }
+  | { type: "verification"; testsPass: boolean; output: string }
+  | { type: "done"; result: EngineerResult };
+
 export type EngineerOptions = {
+  onEvent?: (event: EngineerEvent) => void;
+  signal?: AbortSignal;
   provider: LLMProvider;
   sandbox: SandboxLike;
   task: string;
@@ -80,6 +91,15 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
   let reviewerApproved: boolean | undefined;
   let error: string | undefined;
 
+  const emit = (event: EngineerEvent) => {
+    try {
+      options.onEvent?.(event);
+    } catch {
+      // Listener errors never affect the run.
+    }
+  };
+  emit({ type: "start", mode });
+
   const base = (await sandbox.exec("git rev-parse HEAD")).stdout.trim();
   const allTools = createSandboxTools(sandbox);
   const registryOf = (names: string[]): ToolRegistry => {
@@ -96,6 +116,7 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
     maxSteps: number,
     readOnly: boolean,
   ): Promise<RunResult> {
+    emit({ type: "phase_start", phase: name });
     const before = readOnly ? await snapshot(sandbox) : "";
     const used = usage.inputTokens + usage.outputTokens;
     const result = await runAgent({
@@ -103,6 +124,8 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
       tools: registryOf(tools),
       system,
       task,
+      ...(options.signal ? { signal: options.signal } : {}),
+      onEvent: (event) => emit({ type: "agent", phase: name, event }),
       limits: {
         ...options.limits,
         maxSteps,
@@ -117,18 +140,21 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
     usage.inputTokens += result.usage.inputTokens;
     usage.outputTokens += result.usage.outputTokens;
     steps += result.steps;
-    phases.push({
+    const trace: PhaseTrace = {
       name,
       status: result.status,
       steps: result.steps,
       usage: result.usage,
       readOnlyViolation: violation,
-    });
+    };
+    phases.push(trace);
+    emit({ type: "phase_end", phase: name, trace });
     if (result.error && !error) error = `${name}: ${result.error}`;
     return result;
   }
 
-  const outOfBudget = () => usage.inputTokens + usage.outputTokens >= budget;
+  const outOfBudget = () =>
+    usage.inputTokens + usage.outputTokens >= budget || options.signal?.aborted === true;
 
   try {
     if (mode === "single") {
@@ -169,7 +195,9 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
     return { pass: false, output: "" };
   });
 
-  return {
+  emit({ type: "verification", testsPass: verification.pass, output: clip(verification.output, 2_000) });
+
+  const final: EngineerResult = {
     mode,
     diff,
     testsPass: verification.pass,
@@ -181,6 +209,8 @@ export async function solveTask(options: EngineerOptions): Promise<EngineerResul
     reviewerApproved,
     error,
   };
+  emit({ type: "done", result: final });
+  return final;
 }
 
 const PLANNER_TOOLS = ["read_file", "run_command"];

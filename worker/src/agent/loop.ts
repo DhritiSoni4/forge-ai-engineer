@@ -6,7 +6,10 @@ import type {
   Usage,
 } from "../llm/types.js";
 import type { ToolRegistry } from "../tools/registry.js";
+import { redact } from "../mcp/redact.js";
 import { withTimeout } from "../util/timeout.js";
+import { MAX_EVENT_CHARS } from "./events.js";
+import type { AgentEvent } from "./events.js";
 
 export type RunLimits = {
   maxSteps: number;
@@ -28,7 +31,8 @@ export type RunStatus =
   | "completed"
   | "max_steps"
   | "budget_exceeded"
-  | "provider_error";
+  | "provider_error"
+  | "aborted";
 
 export type RunResult = {
   status: RunStatus;
@@ -45,6 +49,10 @@ export type RunOptions = {
   system: string;
   task: string;
   limits?: Partial<RunLimits>;
+  /** Called synchronously for each model message, tool call, and tool result. */
+  onEvent?: (event: AgentEvent) => void;
+  /** Checked before every model call; aborting ends the run with status "aborted". */
+  signal?: AbortSignal;
 };
 
 /**
@@ -59,7 +67,16 @@ export async function runAgent(options: RunOptions): Promise<RunResult> {
   ];
   const usage: Usage = { inputTokens: 0, outputTokens: 0 };
 
+  const emit = (event: AgentEvent) => {
+    try {
+      options.onEvent?.(event);
+    } catch {
+      // A broken listener must never break the run.
+    }
+  };
+
   for (let step = 1; step <= limits.maxSteps; step += 1) {
+    if (options.signal?.aborted) return finish("aborted", messages, usage, step - 1, "");
     let response;
     try {
       response = await options.provider.complete({
@@ -76,7 +93,12 @@ export async function runAgent(options: RunOptions): Promise<RunResult> {
     usage.outputTokens += response.usage.outputTokens;
     messages.push({ role: "assistant", content: response.content });
 
+    const text = finalText(response.content);
+    if (text) emit({ type: "assistant", step, text: clipEvent(text) });
     const toolUses = response.content.filter(isToolUse);
+    for (const call of toolUses) {
+      emit({ type: "tool_call", step, id: call.id, name: call.name, input: call.input });
+    }
     if (toolUses.length === 0) {
       return finish("completed", messages, usage, step, finalText(response.content));
     }
@@ -85,6 +107,17 @@ export async function runAgent(options: RunOptions): Promise<RunResult> {
       toolUses.map((call) => runTool(call, options.tools, limits)),
     );
     messages.push({ role: "user", content: results });
+    for (const [index, result] of results.entries()) {
+      if (result.type !== "tool_result") continue;
+      emit({
+        type: "tool_result",
+        step,
+        id: result.tool_use_id,
+        name: toolUses[index]?.name ?? "unknown",
+        output: clipEvent(result.content),
+        isError: result.is_error,
+      });
+    }
 
     if (usage.inputTokens + usage.outputTokens > limits.maxTotalTokens) {
       return finish("budget_exceeded", messages, usage, step, "");
@@ -145,6 +178,10 @@ function finalText(content: ContentBlock[]): string {
 
 function toolResult(id: string, content: string, isError: boolean): ContentBlock {
   return { type: "tool_result", tool_use_id: id, content, is_error: isError };
+}
+
+function clipEvent(text: string): string {
+  return truncate(redact(text), MAX_EVENT_CHARS);
 }
 
 function truncate(text: string, max: number): string {

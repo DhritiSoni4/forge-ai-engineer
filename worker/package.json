@@ -15,7 +15,9 @@
     "sandbox:reap": "tsx src/sandbox-cli.ts reap",
     "eval": "tsx src/eval-cli.ts",
     "eval:validate": "tsx src/eval-cli.ts validate",
-    "engineer": "tsx src/engineer-cli.ts"
+    "engineer": "tsx src/engineer-cli.ts",
+    "serve": "tsx src/server-cli.ts",
+    "record:demo": "tsx scripts/record-traces.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
