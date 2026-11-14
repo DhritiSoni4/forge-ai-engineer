@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
     "lint": "eslint .",
     "test": "vitest run",
     "run:agent": "tsx src/cli.ts",
-    "mcp": "tsx src/mcp-cli.ts"
+    "mcp": "tsx src/mcp-cli.ts",
+    "sandbox": "tsx src/sandbox-cli.ts",
+    "sandbox:build": "tsx src/sandbox-cli.ts build",
+    "sandbox:reap": "tsx src/sandbox-cli.ts reap"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

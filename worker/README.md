@@ -67,3 +67,56 @@ npm run mcp -- call filesystem__list_directory '{"path":"/path/to/scratch/dir"}'
 - **Untrusted output:** every result is wrapped in `<untrusted_tool_output>` tags, with attempts to close the envelope early neutralized, and the system prompt tells the model to treat it as data. Risk classes and allowlists come only from config, never from tool output, so an injected instruction cannot widen what a tool may do. Tool descriptions are length-capped and stripped of control characters.
 - **Secrets:** read from env only. Values of secret-looking variables (`*TOKEN*`, `*KEY*`, `*SECRET*`, ...) and all header values are redacted from output, errors, and logs, along with common token shapes (`ghp_...`, `sk-ant-...`, `Bearer ...`). Stdio server stderr is discarded, and child processes receive only a minimal default environment plus what the config lists. HTTP servers must use https unless they are local.
 - **Tool set is fixed at discovery.** A server that later advertises new tools does not get them exposed.
+
+## Sandboxed execution (Phase 2)
+
+Agent code and shell commands run in Docker, never on the worker's host. The sandbox is a library plus agent tools; it is deployed with the worker, **not** with the Vercel UI.
+
+```bash
+npm run sandbox:build        # builds forge-sandbox and forge-egress-proxy (needs network once)
+npm run sandbox:reap         # remove orphaned containers/networks/workspaces
+```
+
+```ts
+const sandbox = await Sandbox.create({ network: { mode: "none" } });
+for (const tool of createSandboxTools(sandbox)) registry.register(tool);
+// run_command, read_file, write_file, apply_patch, run_tests, clone_repo
+await sandbox.destroy(); // or use withSandbox(options, fn), which always cleans up
+```
+
+### What a sandbox is
+
+One fresh container per run (`docker run -d --init`), with commands executed via `docker exec`, so edits and test runs share state.
+
+| Control | Setting |
+| --- | --- |
+| User | non-root (host uid, never 0), `--cap-drop ALL`, `no-new-privileges` |
+| Filesystem | `--read-only` root, writable `/tmp` tmpfs, per-run workspace bind mount at `/workspace` |
+| Host access | the workspace directory only; no docker socket, no `--privileged`, no env passthrough |
+| Resources | `--cpus`, `--memory` (swap disabled), `--pids-limit`, `nofile`, no core dumps |
+| Time | per-command wall-clock limit enforced in-container with `timeout` (process group, then SIGKILL); if that fails the container is destroyed; the container also exits on its own after `lifetimeSec` |
+| Network | none by default; opt-in allowlist (below) |
+| Secrets | none enter the container; the docker CLI is spawned with a minimal environment |
+
+All file operations (`read_file`, `write_file`, `apply_patch`) run *inside* the container, so a symlink the agent plants cannot make the host read its own files. Paths are also confined to `/workspace` before any call is made.
+
+### Network allowlist
+
+`network: { mode: "allowlist", hosts: ["pypi.org", "*.pythonhosted.org"] }` puts the sandbox on a per-run `--internal` Docker network whose only neighbor is an egress proxy. Ignoring `HTTP(S)_PROXY` gets nowhere because there is no route out. The proxy only permits ports 80/443 to allowlisted hostnames and refuses any name that resolves to a private, loopback, link-local, or metadata address (SSRF and DNS-rebinding defense).
+
+### Cloning
+
+The sandbox is offline, so `clone_repo` clones **on the host**: https only, allowlisted hosts (default `github.com`), no embedded credentials, scrubbed git environment, no hooks. The ref is then checked out inside the container.
+
+### Cleanup
+
+Containers are destroyed on success, failure, and timeout. `reapOrphans` / `startReaper` remove anything labeled `forge.sandbox=1` older than a threshold (default 2h, above the container lifetime), plus its network and stale workspace directory. It never touches unlabeled containers.
+
+### Limitations
+
+- **Docker is not a VM boundary.** Containers share the host kernel. For hostile code at scale, pass `runtime: "runsc"` (gVisor) or run the worker on a throwaway VM.
+- **The worker needs Docker daemon access, which is root-equivalent on its host.** Use a dedicated machine or rootless Docker.
+- **Disk is not capped.** The workspace is a host directory; use filesystem quotas on `rootDir` in production. `/tmp` is a size-limited tmpfs, but it counts against container memory.
+- **`setsid` escapes the process-group kill.** A deliberately detached process survives a command timeout until the container is destroyed; it is still bound by the pid, memory, and lifetime limits.
+- **The clone runs git on the host** against attacker-influenced data. Inputs are tightly validated, but a git vulnerability would land on the worker host, not in a container.
+- **Tested on** Docker Desktop (macOS arm64, cgroup v2) locally and on Linux in CI. Resource-limit behavior can differ on other setups.

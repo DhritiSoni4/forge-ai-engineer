@@ -1,0 +1,17 @@
+# Sandbox images for the Forge worker. Build with:
+#   docker compose --profile build build
+#
+# The long-running worker service (control-plane API + reaper) is added in
+# Phase 3 together with the HTTP API it serves. It will need access to the
+# Docker daemon, which is root-equivalent on the host: run it on a dedicated
+# machine or with rootless Docker, never alongside anything you care about.
+services:
+  sandbox-image:
+    image: forge-sandbox:latest
+    build: ./worker/sandbox/image
+    profiles: ["build"]
+
+  egress-proxy-image:
+    image: forge-egress-proxy:latest
+    build: ./worker/sandbox/proxy
+    profiles: ["build"]

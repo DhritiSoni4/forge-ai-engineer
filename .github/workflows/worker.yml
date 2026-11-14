@@ -21,4 +21,8 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
+      - name: Build sandbox images
+        run: npm run sandbox:build
       - run: npm test
+        env:
+          FORGE_TEST_NETWORK: "1"
