@@ -3,6 +3,12 @@ import { wrapUntrusted } from "../mcp/untrusted.js";
 import type { Tool } from "../tools/registry.js";
 import type { ExecResult, Sandbox } from "./sandbox.js";
 
+/** The slice of Sandbox the agent tools need; lets tests and evals swap in a fake. */
+export type SandboxLike = Pick<
+  Sandbox,
+  "exec" | "readFile" | "writeFile" | "applyPatch" | "runTests" | "cloneRepo"
+>;
+
 const MAX_STREAM_CHARS = 8000;
 
 function schemaOf(schema: z.ZodType): Record<string, unknown> {
@@ -70,7 +76,7 @@ const cloneRepoInput = z.object({
  * The agent's view of a sandbox. Everything returned is wrapped as untrusted:
  * file contents and command output can carry instructions planted in a repo.
  */
-export function createSandboxTools(sandbox: Sandbox): Tool[] {
+export function createSandboxTools(sandbox: SandboxLike): Tool[] {
   const wrap = (tool: string, text: string) => wrapUntrusted("sandbox", tool, text);
 
   return [

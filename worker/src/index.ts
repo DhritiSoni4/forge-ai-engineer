@@ -10,3 +10,7 @@ export type { McpManagerOptions, ServerStatus } from "./mcp/manager.js";
 export { loadMcpConfig, parseMcpConfig } from "./mcp/config.js";
 export { UNTRUSTED_SYSTEM_NOTICE } from "./mcp/untrusted.js";
 export { redact } from "./mcp/redact.js";
+export { solveTask, seedWorkspace, parseVerdict } from "./engineer/engineer.js";
+export type { EngineerOptions, EngineerResult, EngineerMode, PhaseTrace } from "./engineer/engineer.js";
+export { createSandboxTools } from "./sandbox/tools.js";
+export type { SandboxLike } from "./sandbox/tools.js";
