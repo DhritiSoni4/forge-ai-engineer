@@ -1,278 +1,90 @@
-# Forge AI Engineer 🚀
+# Forge
 
-> **An autonomous multi-agent AI software engineering platform that transforms natural language requirements into structured software implementation plans through a modular multi-agent architecture.**
+**A sandboxed multi-agent coding engine: Planner → Coder → Reviewer agents that edit a repository inside a locked-down Docker container, with every result verified by the harness, not by the model.**
 
-> **Current Status:** 🚧 Milestone 2 – Production Frontend Infrastructure • Planning Engine Complete
+[![worker-ci](https://github.com/DhritiSoni4/forge-ai-engineer/actions/workflows/worker.yml/badge.svg)](https://github.com/DhritiSoni4/forge-ai-engineer/actions/workflows/worker.yml)
 
----
+Most "AI coding agent" demos trust whatever the model says. Forge is built around the opposite rule: **the model never grades itself and never touches the host.**
 
-# Vision
-
-Forge AI Engineer explores a future where software development is coordinated by a team of specialized AI agents rather than a single general-purpose model.
-
-Each agent owns a dedicated phase of the software engineering lifecycle, enabling modular reasoning, extensibility, and future orchestration.
+## How it works
 
 ```text
-                 User Prompt
-                      │
-                      ▼
-          Requirement Analyzer
-                      │
-                      ▼
-              Planner Agent
-                      │
-                      ▼
-        Code Generator Agent
-                      │
-                      ▼
-          Execution Agent
-                      │
-                      ▼
-           Reviewer Agent
-                      │
-                      ▼
-          Completed Software
+ task + repo
+     │  copied into a fresh, offline, non-root Docker sandbox (git repo, base commit recorded)
+     ▼
+ Planner   read-only tools ──► plan            (any change it makes is detected and reverted)
+     ▼
+ Coder     read/write/patch/run/test tools ──► edits files, runs tests
+     ▼
+ Reviewer  read-only tools + the diff ──► VERDICT: APPROVE | REJECT
+     │          └─ REJECT → feedback goes back to the Coder (bounded revisions)
+     ▼
+ Harness   re-runs the tests itself, computes the diff from git against the base commit
 ```
 
----
+What the harness guarantees (all covered by tests in [`worker/test/engineer.test.ts`](worker/test/engineer.test.ts)):
 
-# Current Features
+- **Authoritative results.** `testsPass` and `diff` come from the harness re-running tests and `git diff` — a model that claims "all tests pass" without changing anything is reported as a failure.
+- **Enforced read-only phases.** The Planner and Reviewer get no write tools, and the working tree is hashed before and after; any change is reverted and flagged as a violation.
+- **Shared budgets.** One token budget spans all phases, plus per-phase step limits and per-tool timeouts.
+- **Prompt-injection containment.** Everything read from the repo or produced by a command reaches the model inside an `<untrusted_tool_output>` envelope (envelope-closing attempts are neutralized). Tool permissions come from config, never from model or tool output.
 
-## Backend
+### The sandbox ([details](worker/README.md))
 
-- ✅ FastAPI backend
-- ✅ Modular service architecture
-- ✅ Requirement Analyzer
-- ✅ Planner Agent
-- ✅ Dynamic implementation roadmap generation
-- ✅ Project metadata extraction
-- ✅ Framework & database detection
-- ✅ Structured REST API
-- ✅ Unit testing with Pytest
+One container per run: non-root, `--cap-drop ALL`, read-only root filesystem, CPU/memory/pid limits, wall-clock limits, **no network by default**. Optional per-run allowlist through an egress proxy that refuses private, loopback and cloud-metadata addresses (SSRF / DNS-rebinding defense). An orphan reaper cleans up after crashes. MCP tools are default-deny with secret redaction. Known limits (shared kernel, `setsid` escape of the process-group kill, uncapped disk) are documented honestly in the worker README.
 
-## Frontend
+## Evaluation
 
-### Workspace
+Forge ships with an evaluation harness that compares the **multi-agent pipeline against a single-agent baseline** under the same token budget.
 
-- ✅ Premium landing page
-- ✅ Sticky navigation
-- ✅ Responsive layout
-- ✅ Workspace sidebar
-- ✅ Persistent project history
-- ✅ Cursor-inspired planner workspace
-- ✅ Auto-resizing prompt editor
-- ✅ Keyboard shortcuts (`Ctrl/Cmd + Enter`)
+- **11 bug-fix / feature tasks** in [`worker/eval/tasks`](worker/eval/tasks) (pagination, LRU cache, token bucket, CSV parsing, topological sort, atomic transfers, a multi-file CLI change, …).
+- Each task has **visible tests** the agent can run and **hidden tests** written into the sandbox only after the agent finishes. A task is *resolved* only if the hidden tests pass; passing visible-but-not-hidden is counted separately as **overfit**.
+- Every task is **proven fair** before a model sees it ([`checkTask`](worker/src/eval/tasks.ts), run in CI): tests fail on the starting repo, hidden tests fail on it too, and the reference solution passes both. (This caught two flawed tasks while building the suite.)
+- Reports include a 95% Wilson confidence interval, mean steps/tokens, p50/p95 latency and — if you pass prices — cost per task. Prices are never assumed.
 
-### Planner Experience
+```bash
+cd worker && npm ci
+npm run sandbox:build            # build the sandbox images (needs Docker)
+npm run eval:validate            # prove all tasks are solvable (no API key needed)
+export ANTHROPIC_API_KEY=...     # never commit this
+npm run eval -- --mode both --price-in <USD/MTok> --price-out <USD/MTok>
+```
 
-- ✅ Planner API integration
-- ✅ Animated loading state
-- ✅ Interactive implementation roadmap
-- ✅ Metadata dashboard
-- ✅ Animated task cards
+**Results:** a full model run has not been committed yet. When it is, the table and raw JSON will live in `worker/eval/results/`. With 11 tasks the confidence intervals are wide by design — the report prints them so nobody over-reads a single run.
 
-### AI Experience
+Try the pipeline on any local project (your directory is copied, never modified):
 
-- ✅ Multi-agent execution timeline
-- ✅ AI pipeline visualization
-- ✅ Aurora background
-- ✅ Glassmorphism UI
-- ✅ Framer Motion animations
-- ✅ Reusable component library
+```bash
+npm run engineer -- --dir ../my-project --test "pytest -q" "Fix the failing date parsing"
+```
 
-### Application Infrastructure
-
-- ✅ Global Command Palette (`⌘K / Ctrl + K`)
-- ✅ Dynamic command registry
-- ✅ Recent project commands
-- ✅ Global toast notification system
-- ✅ Error boundary
-- 🚧 Settings system
-
----
-
-# Tech Stack
-
-## Frontend
-
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS v4
-- Framer Motion
-- Lucide React
-- cmdk
-
-## Backend
-
-- FastAPI
-- Python
-- Pydantic
-- Pytest
-
----
-
-# Repository Structure
+## Repository layout
 
 ```text
-forge-ai-engineer/
-
-├── backend/
-│   ├── app/
-│   │   ├── agents/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── main.py
-│   └── tests/
-│
-├── frontend/
-│   └── src/
-│       ├── api/
-│       ├── assets/
-│       ├── components/
-│       │   ├── command/
-│       │   ├── error/
-│       │   ├── hero/
-│       │   ├── layout/
-│       │   ├── pipeline/
-│       │   ├── planner/
-│       │   ├── settings/
-│       │   └── ui/
-│       │       └── toast/
-│       ├── pages/
-│       ├── services/
-│       ├── types/
-│       ├── App.tsx
-│       └── main.tsx
-│
-├── docs/
-└── README.md
+worker/    TypeScript agent engine (this is the core of the project)
+  src/agent       model/tool loop with step, token, and timeout limits
+  src/engineer    Planner → Coder → Reviewer pipeline + harness verification
+  src/sandbox     Docker sandbox, egress proxy, reaper, agent tools
+  src/mcp         MCP client (stdio + streamable HTTP), allowlists, redaction
+  src/eval        task loader, fairness checker, runner, statistics
+  eval/tasks      11 verified tasks (repo / hidden / solution)
+  test            unit + Docker integration tests
+frontend/  React + TypeScript planner workspace UI (early prototype)
+backend/   FastAPI service with a rule-based requirement analyzer and planner (early prototype)
 ```
 
----
+## Status and honesty notes
 
-# Current Architecture
+- **Done and tested:** agent loop, MCP client, hardened sandbox, multi-agent pipeline, eval harness and tasks (109 offline tests; Docker-backed tests run in CI).
+- **Early prototype:** `frontend/` and `backend/` predate the worker. The backend planner is deterministic keyword rules, **not an LLM**, and the UI is not yet connected to the worker. Wiring them (an HTTP API in front of `solveTask` with streamed traces) is the next milestone.
+- **Not yet done:** a committed model-run eval table, SWE-bench-style real-repo tasks (the sandbox is offline, so dependencies must be baked into the image), authentication and multi-user workspaces.
+- Docker is not a VM boundary; for hostile code run the worker on a throwaway VM or with gVisor (`runtime: "runsc"`).
 
-```text
-                    React Frontend
-                           │
-            ┌──────────────┴──────────────┐
-            ▼                             ▼
-   Global Providers                Planner Workspace
-(Command • Toast • Error)                 │
-            │                             ▼
-            │                     POST /plan API
-            │                             │
-            └──────────────┬──────────────┘
-                           ▼
-               Requirement Analyzer
-                           │
-             ┌─────────────┴─────────────┐
-             ▼                           ▼
-      Project Metadata           Planner Agent
-             │                           │
-             └─────────────┬─────────────┘
-                           ▼
-               Implementation Plan
-                           │
-                           ▼
-              Interactive Planner UI
-                           │
-                           ▼
-            Persistent Project History
-```
-
----
-
-# Running the Project
-
-## Backend
+## Development
 
 ```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+cd worker
+npm ci && npm run typecheck && npm run lint && npm test
 ```
 
-Run tests:
-
-```bash
-python -m pytest
-```
-
-## Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
-
-# Roadmap
-
-## ✅ Completed
-
-- Requirement Analyzer
-- Planner Agent
-- Premium frontend
-- Planner workspace
-- Project history
-- Multi-agent timeline
-- Command palette
-- Toast notifications
-- Error boundary
-
-## 🚧 In Progress
-
-- Settings system
-- Mobile navigation
-- Global loading overlay
-- Theme polish
-- Accessibility improvements
-
-## 🔜 Planned
-
-### Intelligent Planning
-
-- LLM-powered planner
-- Streaming responses
-- Dependency-aware planning
-- DAG visualization
-
-### Autonomous Coding
-
-- Code Generator Agent
-- Repository scaffolding
-- Multi-file generation
-
-### Autonomous Execution
-
-- Execution Agent
-- Reviewer Agent
-- Self-healing workflows
-- Multi-agent orchestration
-
-### Platform
-
-- Authentication
-- GitHub integration
-- Docker execution
-- Team workspaces
-- Real-time collaboration
-
----
-
-# Development Philosophy
-
-Forge is developed using production software engineering practices. Each feature is built as a complete vertical slice with a strong emphasis on modularity, scalability, maintainability, and reusable architecture. This allows future AI capabilities to be integrated without major architectural changes.
-
----
-
-# Future Vision
-
-Forge aims to become a production-grade autonomous software engineering platform capable of understanding requirements, planning architecture, generating production-ready code, executing workflows, reviewing implementations, and orchestrating multiple specialized AI agents through a modern developer workspace.
+Docker-backed tests skip automatically when Docker or the images are unavailable.
