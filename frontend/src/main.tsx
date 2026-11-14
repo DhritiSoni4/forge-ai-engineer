@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { LoadingProvider } from "./components/ui/loading/LoadingProvider";
 import "./index.css";

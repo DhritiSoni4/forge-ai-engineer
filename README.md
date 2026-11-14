@@ -33,6 +33,10 @@ What the harness guarantees (all covered by tests in [`worker/test/engineer.test
 
 One container per run: non-root, `--cap-drop ALL`, read-only root filesystem, CPU/memory/pid limits, wall-clock limits, **no network by default**. Optional per-run allowlist through an egress proxy that refuses private, loopback and cloud-metadata addresses (SSRF / DNS-rebinding defense). An orphan reaper cleans up after crashes. MCP tools are default-deny with secret redaction. Known limits (shared kernel, `setsid` escape of the process-group kill, uncapped disk) are documented honestly in the worker README.
 
+## Live demo
+
+**https://dhritisoni4.github.io/forge-ai-engineer/** is a static GitHub Pages build of the planner UI. It has no server, so the (rule-based) planner runs in the browser and a banner says so. The agent engine needs Docker and cannot run on a static host; see the evaluation section to run it yourself.
+
 ## Evaluation
 
 Forge ships with an evaluation harness that compares the **multi-agent pipeline against a single-agent baseline** under the same token budget.

@@ -1,7 +1,13 @@
 import Home from "./pages/Home";
+import DemoBanner from "./components/ui/DemoBanner";
 
 function App() {
-  return <Home />;
+  return (
+    <>
+      <DemoBanner />
+      <Home />
+    </>
+  );
 }
 
 export default App;
