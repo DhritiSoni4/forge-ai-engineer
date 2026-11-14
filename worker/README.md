@@ -120,3 +120,7 @@ Containers are destroyed on success, failure, and timeout. `reapOrphans` / `star
 - **`setsid` escapes the process-group kill.** A deliberately detached process survives a command timeout until the container is destroyed; it is still bound by the pid, memory, and lifetime limits.
 - **The clone runs git on the host** against attacker-influenced data. Inputs are tightly validated, but a git vulnerability would land on the worker host, not in a container.
 - **Tested on** Docker Desktop (macOS arm64, cgroup v2) locally and on Linux in CI. Resource-limit behavior can differ on other setups.
+
+## HTTP API
+
+`npm run serve` starts `POST /runs` (SSE stream of run events) and `GET /health`. See the root README for the request shape and safeguards. Environment: `ANTHROPIC_API_KEY` (required), `FORGE_HOST` (default `127.0.0.1`), `FORGE_PORT` (8787), `FORGE_API_TOKEN` (required for non-loopback hosts), `FORGE_CORS_ORIGINS`, `FORGE_MODEL`, `FORGE_MAX_TOKENS`.

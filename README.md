@@ -35,7 +35,35 @@ One container per run: non-root, `--cap-drop ALL`, read-only root filesystem, CP
 
 ## Live demo
 
-**https://dhritisoni4.github.io/forge-ai-engineer/** is a static GitHub Pages build of the planner UI. It has no server, so the (rule-based) planner runs in the browser and a banner says so. The agent engine needs Docker and cannot run on a static host; see the evaluation section to run it yourself.
+**https://dhritisoni4.github.io/forge-ai-engineer/**: an **Agent runs** viewer that replays four recorded pipeline runs step by step (phases, tool calls, test output, final git diff, harness verdict):
+
+| Replay | What it shows |
+| --- | --- |
+| Multi-agent success | Plan → edit → test → review → verified against hidden tests |
+| A coder claims success but changed nothing | The harness reports FAIL anyway, even though the reviewer was fooled |
+| The Planner tries to edit code | The read-only violation is detected, flagged and reverted |
+| The Reviewer rejects a half-fix | The revision loop fixes what visible tests missed |
+
+**What is real and what is scripted:** the sandbox pipeline, tool execution, test runs, read-only enforcement and verification in these traces are real harness output. The model's replies are scripted (a mock provider) so the scenarios are deterministic, and the page says so. They demonstrate the harness's guarantees, not model quality; model results come from the eval below. Regenerate them with `npm run record:demo`.
+
+The site is static (GitHub Pages), so the engine itself can't run there. The other tab is the original rule-based planner prototype, which runs in the browser.
+
+## Run it live: HTTP API + UI
+
+```bash
+cd worker
+export ANTHROPIC_API_KEY=...      # never commit this
+npm run sandbox:build && npm run serve        # http://127.0.0.1:8787
+
+cd ../frontend
+VITE_FORGE_API=http://127.0.0.1:8787 npm run dev   # adds a live-run panel to the Agent runs tab
+```
+
+`POST /runs` takes `{ task, files, mode, testCommand? }` and streams the run as Server-Sent Events (`phase_start`, `agent` tool calls and results, `verification`, `done`). Safeguards, all covered by [`worker/test/server.test.ts`](worker/test/server.test.ts):
+
+- Listens on loopback by default and **refuses to bind elsewhere without `FORGE_API_TOKEN`** (it starts Docker containers). Bearer auth uses a constant-time compare.
+- Strict input validation (relative paths only, file count and size limits), body size cap, and a CORS origin allowlist.
+- One run at a time; the sandbox is always destroyed, a client disconnect or timeout aborts the run, and secret-shaped values are redacted from streamed events.
 
 ## Evaluation
 
@@ -71,16 +99,19 @@ worker/    TypeScript agent engine (this is the core of the project)
   src/sandbox     Docker sandbox, egress proxy, reaper, agent tools
   src/mcp         MCP client (stdio + streamable HTTP), allowlists, redaction
   src/eval        task loader, fairness checker, runner, statistics
+  src/server      HTTP/SSE API in front of the pipeline
+  scripts         records the demo traces
   eval/tasks      11 verified tasks (repo / hidden / solution)
   test            unit + Docker integration tests
-frontend/  React + TypeScript planner workspace UI (early prototype)
+frontend/  React + TypeScript UI: agent-run viewer (replay + live) and the planner prototype
 backend/   FastAPI service with a rule-based requirement analyzer and planner (early prototype)
 ```
 
 ## Status and honesty notes
 
-- **Done and tested:** agent loop, MCP client, hardened sandbox, multi-agent pipeline, eval harness and tasks (109 offline tests; Docker-backed tests run in CI).
-- **Early prototype:** `frontend/` and `backend/` predate the worker. The backend planner is deterministic keyword rules, **not an LLM**, and the UI is not yet connected to the worker. Wiring them (an HTTP API in front of `solveTask` with streamed traces) is the next milestone.
+- **Done and tested:** agent loop, MCP client, hardened sandbox, multi-agent pipeline, eval harness and tasks (offline test suite; Docker-backed tests run in CI).
+- **Early prototype:** the `backend/` planner (and the UI's Planner tab) is deterministic keyword rules, **not an LLM**; it predates the worker and is not part of the agent pipeline.
+- **Not yet exercised end to end:** the live-run panel and `npm run serve` are tested against a fake sandbox and mock model, but have not been run against real Docker and a real model.
 - **Not yet done:** a committed model-run eval table, SWE-bench-style real-repo tasks (the sandbox is offline, so dependencies must be baked into the image), authentication and multi-user workspaces.
 - Docker is not a VM boundary; for hostile code run the worker on a throwaway VM or with gVisor (`runtime: "runsc"`).
 
