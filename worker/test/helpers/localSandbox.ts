@@ -32,7 +32,8 @@ export class LocalSandbox implements SandboxLike {
     return new Promise((done) => {
       const child = spawn("bash", ["-c", command], {
         cwd: options.cwd ? this.resolvePath(options.cwd) : this.dir,
-        env: { PATH: process.env["PATH"] ?? "", HOME: this.dir },
+        // Keep the real HOME: pip --user installs (e.g. pytest on CI) live under it.
+        env: { PATH: process.env["PATH"] ?? "", HOME: process.env["HOME"] ?? this.dir },
       });
       let stdout = "";
       let stderr = "";
